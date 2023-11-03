@@ -10,10 +10,10 @@
     <h1>全部任务</h1>
     <div class="search-bar">
       <el-row type="flex" justify="center" align="middle">
-        <el-col :span="18">
+        <el-col>
           <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input" style="float: left; margin-left: 30px"></el-input>
         </el-col>
-        <el-col :span="6">
+        <el-col>
           <el-button @click="search" class="search-button" type="primary" icon="el-icon-search">搜索</el-button>
         </el-col>
       </el-row>
@@ -137,16 +137,27 @@ export default {
   text-align: center;
   margin-top: 50px;
 }
-.search-input {
-  width: 250px;
-  margin-right: 10px;
-  top: 10px; /* 距离容器顶部的距离 */
-  left: 1px; /* 距离容器左侧的距离 */
+/*.search-input {*/
+/*  width: 250px;*/
+/*  margin-top: 150px;*/
+/*  position: fixed;*/
+/*  top: 10px;*/
+/*  left: 200px;*/
+/*}*/
+/*.search-button {*/
+/*  top: 10px; !* 距离容器顶部的距离 *!*/
+/*  left: 300px; !* 距离容器右侧的距离 *!*/
+/*}*/
+/*.search-bar {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*}*/
+.search-bar {
+  display: flex;
 }
-.search-button {
-  margin-left: 10px;
-  top: 10px; /* 距离容器顶部的距离 */
-  right: 250px; /* 距离容器右侧的距离 */
+
+.search-input {
+  margin-right: 10px; /* 调整输入框和按钮之间的间距 */
 }
 .course-grid {
   display: flex;
