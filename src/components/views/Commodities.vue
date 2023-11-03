@@ -22,6 +22,7 @@
           <div class="price">{{item.price}}积分</div>
         </el-card>
       </el-tooltip>
+      <exchange @onSubmit="loadCommodities()" ref="edit"></exchange>
     </el-row>
     <el-row>
       <el-pagination
@@ -86,7 +87,18 @@ export default defineComponent({
       return this.commodities.slice(startIndex, endIndex)
     }
   },
+  mounted: function () {
+    this.loadCommodities()
+  },
   methods: {
+    loadCommodities () {
+      var _this = this
+      this.$axios.get('/commodities').then(resp => {
+        if (resp && resp.status === 200) {
+          _this.commodities = resp.data
+        }
+      })
+    },
     handleCurrentChange (page) {
       this.currentPage = page
     },

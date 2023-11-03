@@ -52,9 +52,6 @@ export default defineComponent({
             this.$emit('onSubmit')
           }
         })
-    },
-    uploadImg () {
-      this.form.picture = this.$refs.imgUpload.url
     }
   }
 })
@@ -64,7 +61,7 @@ export default defineComponent({
   <div>
     <i class="el-icon-circle-plus-outline"  @click="dialogFormVisible = true"></i>
     <el-dialog
-      title="添加/修改商品"
+      title="物品兑换"
       :visible.sync="dialogFormVisible"
       @close="clear">
       <el-form v-model="form" style="text-align: left" ref="dataForm">
@@ -73,7 +70,6 @@ export default defineComponent({
         </el-form-item>
         <el-form-item label="图片" :label-width="formLabelWidth" prop="picture">
           <el-input v-model="form.picture" autocomplete="off"></el-input>
-          <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
         </el-form-item>
         <el-form-item label="价格" :label-width="formLabelWidth" prop="price">
           <el-input v-model="form.price" autocomplete="off"></el-input>
