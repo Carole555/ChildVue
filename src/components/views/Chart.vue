@@ -137,21 +137,6 @@ export default {
   text-align: center;
   margin-top: 50px;
 }
-/*.search-input {*/
-/*  width: 250px;*/
-/*  margin-top: 150px;*/
-/*  position: fixed;*/
-/*  top: 10px;*/
-/*  left: 200px;*/
-/*}*/
-/*.search-button {*/
-/*  top: 10px; !* 距离容器顶部的距离 *!*/
-/*  left: 300px; !* 距离容器右侧的距离 *!*/
-/*}*/
-/*.search-bar {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*}*/
 .search-bar {
   display: flex;
 }
