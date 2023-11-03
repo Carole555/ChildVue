@@ -22,7 +22,6 @@
           <div class="price">{{item.price}}积分</div>
         </el-card>
       </el-tooltip>
-      <exchange @onSubmit="loadCommodities()" ref="edit"></exchange>
     </el-row>
     <el-row>
       <el-pagination
@@ -135,11 +134,5 @@ export default defineComponent({
   line-height: 17px;
 }
 
-a {
-  text-decoration: none;
-}
 
-a:link, a:visited, a:focus {
-  color: #3377aa;
-}
 </style>
