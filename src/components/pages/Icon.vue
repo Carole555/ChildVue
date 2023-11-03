@@ -1,16 +1,10 @@
 <template>
   <div class="list">
-    <div class="my-task">
-      <el-row>
-        <el-button  class="my-task-button" @click="toMyTask" type="primary" plain>我的任务</el-button>
-      </el-row>
-    </div>
-    <h1>全部任务</h1>
-
+    <h1>我的任务</h1>
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
-        <div class="course-label" :style="{ backgroundColor: course.required ? 'green' : 'yellow', color: course.required ? 'white' : 'black' }">
-          {{ course.required ? '必做' : '选做' }}
+        <div class="course-label" :style="{ backgroundColor: course.required ? 'yellow' : 'green', color: course.required ? 'red' : 'black' }">
+          {{ course.required ? '待批改' : '已完成' }}
         </div>
         <img :src="course.image" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ course.name }}</h2>
@@ -101,27 +95,12 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++
       }
-    },
-    toMyTask () {
-      this.$router.push('/icon')
     }
   }
 }
 </script>
 
 <style scoped>
-
-.my-task {
-  display: flex;
-  justify-content: flex-end;
-  top: 10px; /* 距离容器顶部的距离 */
-  right: 10px; /* 距离容器右侧的距离 */
-}
-.my-task-button {
-  position: absolute;
-  top: 1px; /* 距离容器顶部的距离 */
-  right: 1px; /* 距离容器右侧的距离 */
-}
 .list {
   text-align: center;
   margin-top: 50px;
