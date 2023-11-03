@@ -22,6 +22,7 @@
           <div class="price">{{item.price}}积分</div>
         </el-card>
       </el-tooltip>
+      <exchange @onSubmit="loadCommodities()" ref="edit"></exchange>
     </el-row>
     <el-row>
       <el-pagination

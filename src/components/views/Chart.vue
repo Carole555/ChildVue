@@ -10,6 +10,7 @@
     <h1>全部任务</h1>
     <div class="search-bar">
       <el-row type="flex" justify="center" align="middle">
+
         <el-col>
           <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input" style="float: left; margin-left: 30px"></el-input>
         </el-col>
