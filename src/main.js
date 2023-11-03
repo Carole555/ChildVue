@@ -8,8 +8,6 @@ import App from './App'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Element)
-import axios from 'axios'
-Vue.prototype.$axios = axios
 import iView from 'iview'
 Vue.use(iView)
 import api from './api/index.js'
