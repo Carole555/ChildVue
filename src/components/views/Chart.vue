@@ -11,7 +11,7 @@
     <div class="search-bar">
       <el-row type="flex" justify="center" align="middle">
         <el-col :span="18">
-          <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input" style="float: left; margin-left: 30px"></el-input>
+          <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input"></el-input>
         </el-col>
         <el-col :span="6">
           <el-button @click="search" class="search-button" type="primary" icon="el-icon-search">搜索</el-button>
