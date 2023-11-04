@@ -32,7 +32,7 @@ const menu = [
       },
       {
         path: '/userInfo',
-        name: 'userInfo',
+        name: '积分明细',
         icon: 'icon-addpeople_fill',
         children: [],
         fixed: false,
