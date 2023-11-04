@@ -16,7 +16,7 @@ const menu = [
     fixed: false,
     children: [
       {
-        path: '/chart',
+        path: '/Course',
         name: '学习任务',
         icon: 'icon-dynamic_fill',
         level: 1,

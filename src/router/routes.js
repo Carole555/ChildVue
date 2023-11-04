@@ -12,7 +12,9 @@ const UserInfo = () => import('@/components/views/UserInfo')
 const List = () => import('@/components/views/List')
 const Filter = () => import('@/components/pages/Filter')
 const Lock = () => import('@/components/layout/base/Lock')
-
+const Course = () => import('@/components/pages/Course')
+const Tasks = () => import('@/components/pages/Tasks')
+const MyTask = () => import('@/components/pages/MyTask')
 const routes = [
   {
     path: '/',
@@ -34,6 +36,14 @@ const routes = [
         path: '/chart',
         name: 'chart',
         component: Chart,
+        meta: {
+          requiresAuth: true // 是否需要登录
+        }
+      },
+      {
+        path: '/Course',
+        name: 'Course',
+        component: Course,
         meta: {
           requiresAuth: true // 是否需要登录
         }
@@ -83,6 +93,38 @@ const routes = [
         path: '/notFound',
         name: 'notFound',
         component: NotFound,
+        meta: {
+          requiresAuth: true // 是否需要登录
+        }
+      },
+      {
+        path: '/tasks',
+        name: 'tasks',
+        component: Tasks,
+        meta: {
+          requiresAuth: true // 是否需要登录
+        }
+      },
+      {
+        path: '/tasks/:taskId',
+        name: 'tasks/:taskId',
+        component: Tasks,
+        meta: {
+          requiresAuth: true // 是否需要登录
+        }
+      },
+      {
+        path: '/myTask',
+        name: 'myTask',
+        component: MyTask,
+        meta: {
+          requiresAuth: true // 是否需要登录
+        }
+      },
+      {
+        path: '/course/:courseId',
+        name: '/course/:courseId',
+        component: Course,
         meta: {
           requiresAuth: true // 是否需要登录
         }
