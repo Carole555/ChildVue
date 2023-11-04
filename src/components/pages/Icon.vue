@@ -1,5 +1,10 @@
 <template>
   <div class="list">
+    <div class="my-task">
+      <el-row>
+        <el-button  class="my-task-button" @click="toMyTask" type="primary" plain>全部任务</el-button>
+      </el-row>
+    </div>
     <h1>我的任务</h1>
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
@@ -95,12 +100,26 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++
       }
+    },
+    toMyTask () {
+      this.$router.push('/chart')
     }
   }
 }
 </script>
 
 <style scoped>
+.my-task {
+  display: flex;
+  justify-content: flex-end;
+  top: 10px; /* 距离容器顶部的距离 */
+  right: 10px; /* 距离容器右侧的距离 */
+}
+.my-task-button {
+  position: absolute;
+  top: 1px; /* 距离容器顶部的距离 */
+  right: 1px; /* 距离容器右侧的距离 */
+}
 .list {
   text-align: center;
   margin-top: 50px;

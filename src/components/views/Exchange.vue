@@ -1,3 +1,334 @@
+<!--<template>-->
+<!--&lt;!&ndash;  <el-dialog&ndash;&gt;-->
+<!--&lt;!&ndash;    title="物品兑换"&ndash;&gt;-->
+<!--&lt;!&ndash;    :visible.sync="dialogFormVisible"&ndash;&gt;-->
+<!--&lt;!&ndash;    @close="clear">&ndash;&gt;-->
+<!--  <div>-->
+<!--    <div v-if="dialogFormVisible" class="popup">-->
+<!--      <div class="popup-content">-->
+
+<!--        <div class="popup-content">-->
+<!--          <div class="content-container">-->
+<!--            <div class="image-container">-->
+<!--              <img :src="imageUrl" alt="Image" class="image">-->
+<!--            </div>-->
+<!--            <div class="text-container">-->
+<!--              <h3 class="image-name">{{ imageName }}</h3>-->
+<!--              <p class="image-description">{{ imageDescription }}</p>-->
+<!--              <p class="image-price">积分: {{ imagePrice }}</p>-->
+<!--              <div class="quantity-container">-->
+<!--                <button class="quantity-button" @click="decreaseQuantity">-</button>-->
+<!--                <span class="quantity">数量: {{ quantity }}</span>-->
+<!--                <button class="quantity-button" @click="increaseQuantity">+</button>-->
+<!--              </div>-->
+<!--              <p class="total-points">消耗积分为: {{ totalPoints }}</p>-->
+<!--              <button class="cancel-button" @click="cancel">-->
+<!--                <span class="cancel-icon">X</span>-->
+<!--                取消-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <button class="exchange-button" @click="exchange">立即兑换</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; 兑换成功弹窗 &ndash;&gt;-->
+<!--    <div v-if="isExchangeSuccessVisible" class="exchange-success-popup">-->
+<!--      <div class="popup-content">-->
+<!--        <h3 class="success-message">兑换成功</h3>-->
+<!--        <button class="close-button" @click="closeExchangeSuccessPopup">关闭</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--&lt;!&ndash;  </el-dialog>&ndash;&gt;-->
+<!--</template>-->
+<!--<script>-->
+<!--import {defineComponent} from 'vue'-->
+
+<!--export default defineComponent({-->
+<!--  name: 'Exchange',-->
+<!--  data () {-->
+<!--    return {-->
+<!--      dialogFormVisible: false,-->
+<!--      isExchangeSuccessVisible: false,-->
+<!--      quantity: 1,-->
+<!--      // 其他数据字段-->
+<!--      imageUrl: '/static/img/fullstack.jpg',-->
+<!--      imageName: '图片名称',-->
+<!--      imageDescription: '图片描述',-->
+<!--      imagePrice: 10-->
+<!--     // 假设价格为10-->
+<!--    }-->
+<!--  },-->
+<!--  computed: {-->
+<!--    totalPoints () {-->
+<!--      // 在这里根据需要计算总积分，并返回计算结果-->
+<!--      // 可以使用this关键字访问组件中的其他属性进行计算-->
+<!--      return this.quantity * this.imagePrice-->
+<!--    }-->
+<!--  },-->
+<!--  methods: {-->
+<!--    clear () { },-->
+<!--    decreaseQuantity () {-->
+<!--      if (this.quantity > 1) {-->
+<!--        this.quantity&#45;&#45;-->
+<!--      }-->
+<!--    },-->
+<!--    increaseQuantity () {-->
+<!--      // 可根据需要添加数量限制-->
+<!--      this.quantity++-->
+<!--    },-->
+<!--    exchange () {-->
+<!--      // 执行兑换操作，可以在这里添加相关逻辑-->
+<!--      // 兑换成功后显示兑换成功弹窗，并关闭当前弹窗-->
+<!--      this.isExchangeSuccessVisible = true-->
+<!--      this.dialogFormVisible = false-->
+<!--    },-->
+<!--    closeExchangeSuccessPopup () {-->
+<!--      this.isExchangeSuccessVisible = false-->
+<!--    },-->
+<!--    cancel () {-->
+<!--      // 取消的事件处理逻辑-->
+<!--      // 可以在这里执行关闭弹窗的操作-->
+<!--      this.dialogFormVisible = false-->
+<!--    }-->
+<!--    // 其他方法-->
+<!--  }-->
+<!--})-->
+<!--</script>-->
+
+<!--<style>-->
+<!--.popup {-->
+<!--  position: fixed;-->
+<!--  top: 0;-->
+<!--  left: 0;-->
+<!--  width: 100%;-->
+<!--  height: 100%;-->
+<!--  background-color: rgba(0, 0, 0, 0.5);-->
+<!--  display: flex;-->
+<!--  align-items: center;-->
+<!--  justify-content: center;-->
+<!--}-->
+
+<!--/*.popup-content {*/-->
+<!--/*  background-color: #fff;*/-->
+<!--/*  padding: 20px;*/-->
+<!--/*  max-width: 700px; !* 调整弹窗的最大宽度 *!*/-->
+<!--/*  width: 100%; !* 添加宽度属性 *!*/-->
+<!--/*  border-radius: 4px;*/-->
+<!--/*  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);*/-->
+<!--/*  position: relative;*/-->
+<!--/*}*/-->
+
+<!--.content-container {-->
+<!--  display: flex;-->
+<!--  align-items: flex-start; /* 使内容顶部对齐 */-->
+<!--}-->
+
+<!--.image-container {-->
+<!--  margin-right: 20px;-->
+<!--}-->
+
+<!--.image {-->
+<!--  width: 100px;-->
+<!--  height: 100px;-->
+<!--  object-fit: cover;-->
+<!--  border-radius: 4px;-->
+<!--}-->
+
+<!--.text-container {-->
+<!--  flex-grow: 1; /* 让文本容器占据剩余空间 */-->
+<!--}-->
+
+<!--.popup img {-->
+<!--  width: 150px;-->
+<!--  height: 150px;-->
+<!--  object-fit: cover;-->
+<!--  margin-bottom: 10px;-->
+<!--}-->
+
+<!--.popup button {-->
+<!--  margin-top: 10px;-->
+<!--}-->
+
+<!--.exchange-success-popup {-->
+<!--  position: fixed;-->
+<!--  top: 0;-->
+<!--  left: 0;-->
+<!--  width: 100%;-->
+<!--  height: 100%;-->
+<!--  background-color: rgba(0, 0, 0, 0.5);-->
+<!--  display: flex;-->
+<!--  align-items: center;-->
+<!--  justify-content: center;-->
+<!--}-->
+
+<!--.exchange-success-popup .popup-content {-->
+<!--  background-color: white;-->
+<!--  padding: 20px;-->
+<!--  text-align: center;-->
+<!--}-->
+<!--.cancel-button {-->
+<!--  position: absolute;-->
+<!--  left: 10px;-->
+<!--  top: 250px;-->
+<!--  padding: 10px 20px;-->
+<!--  background-color: #ff0000;-->
+<!--  color: #ffffff;-->
+<!--  border: none;-->
+<!--  border-radius: 4px;-->
+<!--  cursor: pointer;-->
+<!--}-->
+
+<!--.cancel-icon {-->
+<!--  margin-right: 4px;-->
+<!--  font-weight: bold;-->
+<!--}-->
+<!--</style>-->
+<!--<style>-->
+<!--.exchange-button {-->
+<!--  position: absolute;-->
+<!--  left: 260px;-->
+<!--  top: 250px;-->
+<!--  padding: 10px 20px;-->
+<!--  background-color: #007bff;-->
+<!--  color: #fff;-->
+<!--  border: none;-->
+<!--  border-radius: 4px;-->
+<!--  cursor: pointer;-->
+<!--}-->
+
+
+<!--.popup-content {-->
+<!--  position: relative;-->
+<!--  background-color: #fff;-->
+<!--  padding: 20px;-->
+<!--  max-width: 700px;-->
+<!--  text-align: center;-->
+<!--  border-radius: 4px;-->
+<!--  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);-->
+<!--}-->
+
+<!--.image-container {-->
+<!--  margin-bottom: 10px;-->
+<!--}-->
+
+<!--.image {-->
+<!--  width: 100px;-->
+<!--  height: 100px;-->
+<!--  object-fit: cover;-->
+<!--  border-radius: 4px;-->
+<!--}-->
+
+<!--.image-name {-->
+<!--  font-size: 18px;-->
+<!--  font-weight: bold;-->
+<!--  margin-bottom: 10px;-->
+<!--}-->
+
+<!--.image-description {-->
+<!--  margin-bottom: 10px;-->
+<!--  color: #666;-->
+<!--}-->
+
+<!--.image-price {-->
+<!--  margin-bottom: 10px;-->
+<!--}-->
+
+<!--.quantity-container {-->
+<!--  display: flex;-->
+<!--  align-items: center;-->
+<!--  justify-content: center;-->
+<!--  margin-bottom: 10px;-->
+<!--}-->
+
+<!--.quantity-button {-->
+<!--  padding: 5px 10px;-->
+<!--  background-color: #007bff;-->
+<!--  color: #fff;-->
+<!--  border: none;-->
+<!--  border-radius: 4px;-->
+<!--  cursor: pointer;-->
+<!--}-->
+
+<!--.quantity {-->
+<!--  margin: 0 10px;-->
+<!--  font-size: 16px;-->
+<!--}-->
+
+<!--.total-points {-->
+<!--  margin-bottom: 10px;-->
+<!--  color: #666;-->
+<!--}-->
+
+<!--.exchange-success-popup {-->
+<!--  position: fixed;-->
+<!--  top: 0;-->
+<!--  left: 0;-->
+<!--  width: 100%;-->
+<!--  height: 100%;-->
+<!--  background-color: rgba(0, 0, 0, 0.5);-->
+<!--  display: flex;-->
+<!--  align-items: center;-->
+<!--  justify-content: center;-->
+<!--}-->
+
+<!--.success-message {-->
+<!--  font-size: 24px;-->
+<!--  font-weight: bold;-->
+<!--  margin-bottom: 10px;-->
+<!--}-->
+
+<!--.close-button {-->
+<!--  padding: 10px 20px;-->
+<!--  background-color: #007bff;-->
+<!--  color: #fff;-->
+<!--  border: none;-->
+<!--  border-radius: 4px;-->
+<!--  cursor: pointer;-->
+<!--}-->
+
+<!--</style>-->
+
+<template>
+  <div>
+    <div v-if="dialogFormVisible" class="popup">
+      <div class="popup-content">
+        <div class="content-container">
+        <div class="image-container">
+          <img :src="imageUrl" alt="Image" class="image">
+        </div>
+        <div class="text-container">
+          <h3 class="image-name">{{ imageName }}</h3>
+          <p class="image-description">{{ imageDescription }}</p>
+          <p class="image-price">积分: {{ imagePrice }}</p>
+          <div class="quantity-container">
+            <button class="quantity-button" @click="decreaseQuantity">-</button>
+            <span class="quantity">数量: {{ quantity }}</span>
+            <button class="quantity-button" @click="increaseQuantity">+</button>
+          </div>
+          <p class="total-points">消耗积分: {{ totalPoints }}</p>
+          <div class="button-container">
+            <button class="cancel-button" @click="cancel">
+              <span class="cancel-icon">X</span>
+              取消
+            </button>
+            <button class="exchange-button" @click="exchange">立即兑换</button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div v-if="isExchangeSuccessVisible" class="exchange-success-popup">
+      <div class="popup-content">
+        <h3 class="success-message">兑换成功</h3>
+        <button class="close-button" @click="closeExchangeSuccessPopup">关闭</button>
+      </div>
+    </div>
+  </div>
+</template>
 <script>
 import {defineComponent} from 'vue'
 
@@ -6,101 +337,190 @@ export default defineComponent({
   data () {
     return {
       dialogFormVisible: false,
-      form: {
-        id: '',
-        name: '',
-        picture: '',
-        price: '',
-        des: '',
-        date: '',
-        category: {
-          id: '',
-          name: ''
-        }
-      },
-      formLabelWidth: '120px'
+      isExchangeSuccessVisible: false,
+      quantity: 1,
+      // 其他数据字段
+      imageUrl: '/static/img/fullstack.jpg',
+      imageName: '图片名称',
+      imageDescription: '图片描述',
+      imagePrice: 10
+     // 假设价格为10
+    }
+  },
+  computed: {
+    totalPoints () {
+      // 在这里根据需要计算总积分，并返回计算结果
+      // 可以使用this关键字访问组件中的其他属性进行计算
+      return this.quantity * this.imagePrice
     }
   },
   methods: {
-    clear () {
-      this.form = {
-        id: '',
-        name: '',
-        picture: '',
-        price: '',
-        des: '',
-        date: '',
-        category: {
-          id: '',
-          name: ''
-        }
+    clear () { },
+    decreaseQuantity () {
+      if (this.quantity > 1) {
+        this.quantity--
       }
     },
-    onSubmit () {
-      this.$axios
-        .post('/commodities', {
-          id: this.form.id,
-          name: this.form.name,
-          picture: this.form.picture,
-          price: this.form.price,
-          des: this.form.des,
-          date: this.form.date,
-          category: this.form.category
-        }).then(resp => {
-          if (resp && resp.status === 200) {
-            this.dialogFormVisible = false
-            this.$emit('onSubmit')
-          }
-        })
+    increaseQuantity () {
+      // 可根据需要添加数量限制
+      this.quantity++
+    },
+    exchange () {
+      // 执行兑换操作，可以在这里添加相关逻辑
+      // 兑换成功后显示兑换成功弹窗，并关闭当前弹窗
+      this.isExchangeSuccessVisible = true
+      this.dialogFormVisible = false
+    },
+    closeExchangeSuccessPopup () {
+      this.isExchangeSuccessVisible = false
+    },
+    cancel () {
+      // 取消的事件处理逻辑
+      // 可以在这里执行关闭弹窗的操作
+      this.dialogFormVisible = false
     }
+    // 其他方法
   }
 })
 </script>
+<style>
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content-container {
+  display: flex;
+  align-items: flex-start; /* 使内容顶部对齐 */
+}
+.popup-content {
+  position: relative;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 700px;
+  text-align: center;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-<template>
-  <div>
-    <el-dialog
-      title="物品兑换"
-      :visible.sync="dialogFormVisible"
-      @close="clear">
-      <el-form v-model="form" style="text-align: left" ref="dataForm">
-        <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="图片" :label-width="formLabelWidth" prop="picture">
-          <el-input v-model="form.picture" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="价格" :label-width="formLabelWidth" prop="price">
-          <el-input v-model="form.price" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="类别" :label-width="formLabelWidth" prop="cid">
-          <el-select v-model="form.category.id" placeholder="请选择分类">
-            <el-option label="食品" value="1"></el-option>
-            <el-option label="百货" value="2"></el-option>
-            <el-option label="蔬果" value="3"></el-option>
-            <el-option label="服饰" value="4"></el-option>
-            <el-option label="电器" value="5"></el-option>
-            <el-option label="其他" value="6"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="描述" :label-width="formLabelWidth" prop="des">
-          <el-input type="textarea" v-model="form.des" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="上架日期" :label-width="formLabelWidth" prop="date">
-          <el-input v-model="form.date" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item prop="id" style="height: 0">
-          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
-      </div>
-    </el-dialog>
-  </div>
-</template>
+.image-container {
+  margin-bottom: 20px;
+}
 
-<style scoped>
+.image {
+  width: 200px;
+  height: 160px;
+  border-radius: 4px;
+}
 
+.text-container {
+  margin-bottom: 20px;
+}
+
+.image-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.image-description {
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.image-price {
+  margin-bottom: 10px;
+}
+
+.quantity-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.quantity-button {
+  padding: 4px 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quantity {
+  margin: 0 10px;
+  font-size: 18px;
+}
+
+.total-points {
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+
+.exchange-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.cancel-button {
+  padding: 10px 20px;
+  background-color: #ff0000;
+ color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.cancel-button {
+  margin-right: 10px;
+}
+
+.cancel-icon {
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.exchange-success-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-message {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.close-button {
+  padding: 8px 8px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 </style>
+
+

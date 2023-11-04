@@ -126,13 +126,13 @@ export default {
 .my-task {
   display: flex;
   justify-content: flex-end;
-  top: 10px; /* 距离容器顶部的距离 */
+  top: 28px; /* 距离容器顶部的距离 */
   right: 10px; /* 距离容器右侧的距离 */
 }
 .my-task-button {
   position: absolute;
-  top: 1px; /* 距离容器顶部的距离 */
-  right: 1px; /* 距离容器右侧的距离 */
+  top: 40px; /* 距离容器顶部的距离 */
+  right: 10px; /* 距离容器右侧的距离 */
 }
 .list {
   text-align: center;
