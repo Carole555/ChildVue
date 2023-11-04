@@ -50,8 +50,8 @@ const menu = [
         path: '/table',
         name: 'table',
         children: [],
-        fixed: false,
-        hidden: true
+        fixed: false
+        // hidden: true
       },
       {
         level: 1,
