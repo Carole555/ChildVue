@@ -59,7 +59,6 @@ export default defineComponent({
 
 <template>
   <div>
-<!--    <i class="el-icon-circle-plus-outline"  @click="dialogFormVisible = true"></i>-->
     <el-dialog
       title="物品兑换"
       :visible.sync="dialogFormVisible"
@@ -103,10 +102,5 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.el-icon-circle-plus-outline {
-  margin: 50px 0 0 20px;
-  font-size: 100px;
-  float: left;
-  cursor: pointer;
-}
+
 </style>
