@@ -102,10 +102,5 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.el-icon-circle-plus-outline {
-  margin: 50px 0 0 20px;
-  font-size: 100px;
-  float: left;
-  cursor: pointer;
-}
+
 </style>
