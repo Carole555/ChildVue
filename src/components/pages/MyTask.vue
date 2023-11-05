@@ -1,5 +1,10 @@
 <template>
   <div class="page-container">
+    <div class="my-task">
+      <el-row>
+        <el-button  class="my-task-button" @click="toMyTask" icon="el-icon-arrow-left" type="primary" plain>返回</el-button>
+      </el-row>
+    </div>
     <div class="content-container">
       <h1 class="title">任务名称</h1>
       <div class="status">
@@ -35,6 +40,9 @@ export default {
     }
   },
   methods: {
+    toMyTask () {
+      this.$router.push('/Tasks')
+    },
     handleRemove (file, fileList) {
       console.log(file, fileList)
     },
@@ -76,7 +84,17 @@ export default {
   align-items: center;
   height: 100vh;
 }
-
+.my-task-button {
+  position: absolute;
+  top: -300px; /* 距离容器顶部的距离 */
+  right: -900px; /* 距离容器右侧的距离 */
+}
+.my-task {
+  display: flex;
+  justify-content: flex-end;
+  top: -300px; /* 距离容器顶部的距离 */
+  right: -900px; /* 距离容器右侧的距离 */
+}
 .content-container {
   width: 80%;
   padding: 20px;

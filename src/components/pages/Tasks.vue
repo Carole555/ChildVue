@@ -1,5 +1,10 @@
 <template>
   <div class="list">
+    <div class="my-task">
+      <el-row>
+        <el-button  class="my-task-button" @click="toAllTask" icon="el-icon-arrow-left" type="primary" plain>返回</el-button>
+      </el-row>
+    </div>
     <h1>我的任务</h1>
     <div class="course-grid" @click="toTask">
       <div v-for="task in pagedCourses" :key="task.id" class="course-card" @click="navigateToCourse(task.id)">
@@ -86,6 +91,9 @@ export default {
     }
   },
   methods: {
+    toAllTask () {
+      this.$router.push('/Course')
+    },
     navigateToCourse (tasksId) {
       // Redirect to the course page for the selected course
       this.$router.push(`/Tasks/${tasksId}`)
@@ -127,6 +135,17 @@ export default {
 </script>
 
 <style scoped>
+.my-task-button {
+  position: absolute;
+  top: 1px; /* 距离容器顶部的距离 */
+  right: 1px; /* 距离容器右侧的距离 */
+}
+.my-task {
+  display: flex;
+  justify-content: flex-end;
+  top: 10px; /* 距离容器顶部的距离 */
+  right: 10px; /* 距离容器右侧的距离 */
+}
 .list {
   text-align: center;
   margin-top: 50px;
