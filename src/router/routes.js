@@ -8,7 +8,7 @@ const E404 = () => import('@/components/pages/E404')
 const Icon = () => import('@/components/pages/Icon')
 const Login = () => import('@/components/pages/Login')
 const Table = () => import('@/components/views/Table')
-const UserInfo = () => import('@/components/views/UserInfo')
+const Detail = () => import('@/components/views/Detail')
 const List = () => import('@/components/views/List')
 const Filter = () => import('@/components/pages/Filter')
 const Lock = () => import('@/components/layout/base/Lock')
@@ -57,9 +57,9 @@ const routes = [
         }
       },
       {
-        path: '/userInfo',
-        name: 'userInfo',
-        component: UserInfo,
+        path: '/detail',
+        name: 'detail',
+        component: Detail,
         icon: 'icon-addpeople_fill',
         meta: {
           requiresAuth: true // 是否需要登录
