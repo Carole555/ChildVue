@@ -20,9 +20,6 @@
               <Checkbox label="记住我"></Checkbox>
             </Checkbox-group>
             </Col>
-            <Col span="12">
-            <a style="float:right" @click="toRegister">新用户注册</a>
-            </Col>
           </Row>
 
         </Form>
@@ -36,6 +33,7 @@
   </div>
 </template>
 <script>
+  import axios from 'axios'
   import Cookies from 'js-cookie'
   export default {
     name: 'login',
@@ -62,24 +60,42 @@
       handleSubmit (name) { // login
         this.$refs[name].validate((valid) => {
           this.modal_loading = true
-          setTimeout(() => {
-            this.modal_loading = false
-            if (valid) {
-              this.$Message.success('登录成功!')
-              Cookies.set('token', this.formValidate.password)
-              this.$router.push('/index')
-            } else {
-              this.$Message.error('表单验证失败!')
-              this.$Notice.warning({
-                title: '登录提示',
-                desc: '用户名/密码 随意输入...'
-              })
+          if (valid) {
+            // 构建用于发送给后端的登录数据
+            const loginData = {
+              name: this.formValidate.name,
+              password: this.formValidate.password
             }
-          }, 2000)
+
+            // 向后端发送登录请求
+            axios.post('/api/login', loginData)
+              .then(response => {
+                this.modal_loading = false
+                if (response.data.success) {
+                  this.$Message.success('登录成功!')
+                  Cookies.set('token', response.data.token)
+                  this.$router.push('/index')
+                } else {
+                  this.$Message.error('登录失败!')
+                  this.$Notice.warning({
+                    title: '登录提示',
+                    desc: '用户名/密码错误...'
+                  })
+                }
+              })
+              .catch(error => {
+                this.modal_loading = false
+                console.error('登录请求失败:', error)
+              })
+          } else {
+            this.modal_loading = false
+            this.$Message.error('表单验证失败!')
+            this.$Notice.warning({
+              title: '登录提示',
+              desc: '用户名/密码随意输入...'
+            })
+          }
         })
-      },
-      toRegister () {
-        this.$router.push('/register')
       }
     }
   }
