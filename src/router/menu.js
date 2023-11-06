@@ -1,7 +1,7 @@
 const menu = [
   {
     path: '/index',
-    name: 'index',
+    name: '首页',
     icon: 'icon-dynamic_fill',
     level: 1,
     sort: 1,
