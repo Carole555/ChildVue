@@ -3,7 +3,7 @@ import fetch from './fetch.js'
 // 登录
 export function login (data) {
   return fetch({
-    url: '',
+    url: '/children/child/loginChild',
     method: 'post',
     data
   })

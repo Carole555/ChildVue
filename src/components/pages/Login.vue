@@ -68,7 +68,7 @@
             }
 
             // 向后端发送登录请求
-            axios.post('/api/login', loginData)
+            axios.post('/children/child/loginChild', loginData)
               .then(response => {
                 this.modal_loading = false
                 if (response.data.success) {
