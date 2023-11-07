@@ -76,13 +76,13 @@
             })
               .then(response => {
                 this.modal_loading = false
-                if (response.data.success) {
+                if (response.data.code === '666') {
                   this.$Message.success('登录成功!')
                   Cookies.set('token', response.data.token)
                   this.$router.push('/index')
                 } else {
                   this.$Message.error('登录失败!')
-                  console.error('登录失败:', loginData)
+                  console.error('登录失败:', response.data)
                   this.$Notice.warning({
                     title: '登录提示123',
                     desc: '用户名/密码错误...'
