@@ -30,7 +30,8 @@ const routes = [
         level: 1,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true // 启用 props 传参
       },
       {
         path: '/chart',
@@ -63,7 +64,8 @@ const routes = [
         icon: 'icon-addpeople_fill',
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true // 启用 props 传参
       },
       {
         path: '/table',

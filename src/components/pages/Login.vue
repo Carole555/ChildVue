@@ -79,7 +79,9 @@
                 if (response.data.code === '666') {
                   this.$Message.success('登录成功!')
                   Cookies.set('token', response.data.token)
-                  this.$router.push('/index')
+                  const childId = response.data.data.id // 假设后端返回的childId
+                  console.log(response.data.data.id)
+                  this.$router.push({ name: 'index', params: { childId } })
                 } else {
                   this.$Message.error('登录失败!')
                   console.error('登录失败:', response.data)

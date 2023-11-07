@@ -72,10 +72,16 @@
 <script>
   import IEcharts from 'vue-echarts-v3/src/full.js'
   export default {
+    props: ['childId'],
+    mounted () {
+      console.log('props:', this.childId)
+      // 或者将 childId 存储到组件的数据属性中，以供模板使用
+    },
     name: 'index',
     components: {IEcharts},
     data () {
       return {
+        childId: null, // 初始化 childId 为 null 或合适的初始值
         params: {
           page: 1,
           limit: 10
@@ -126,6 +132,15 @@
       /**
        * 刷新页面请求
        * */
+      getData () {
+        const childId = this.childId // 获取 childId 值
+
+        // 确保 childId 的值有效
+        if (childId === null || childId === undefined) {
+          console.error('childId 无效')
+          return
+        }
+      },
       refresh () {
 
       }

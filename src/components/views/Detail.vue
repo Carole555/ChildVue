@@ -9,7 +9,7 @@
           <a href="#" slot="extra" @click.prevent="refresh">
             <Icon type="ios-loop-strong"></Icon>
           </a>
-          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="getData">
             <el-tab-pane label="全部" name="first">
               <Table
                 :show-header="showHeader"
@@ -18,27 +18,15 @@
                 :data="listData"
                 :columns="columns1"
               ></Table>
-<!--              <Page-->
-<!--                :total="100"-->
-<!--                @on-change="pageChange"-->
-<!--                style="margin-top: 10px"-->
-<!--                @on-page-size-change="PageSizeChange"-->
-<!--              ></Page>-->
             </el-tab-pane>
             <el-tab-pane label="收入" name="second">
               <Table
                 :show-header="showHeader"
                 :height="fixedHeader ? 300 : ''"
                 :size="tableSize"
-                :data="listData"
-                :columns="columns1"
+                :data="listDatatwo"
+                :columns="columns2"
               ></Table>
-<!--              <Page-->
-<!--                :total="100"-->
-<!--                @on-change="pageChange"-->
-<!--                style="margin-top: 10px"-->
-<!--                @on-page-size-change="PageSizeChange"-->
-<!--              ></Page>-->
             </el-tab-pane>
             <el-tab-pane label="支出" name="third">
               <Row>
@@ -68,12 +56,14 @@
 
 <script>
 import {defineComponent} from 'vue'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'list',
   components: {},
   data () {
     return {
+      childId: null, // 用于保存从登陆页面传的childId的属性
       cardList: [
         {
           image: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
@@ -110,19 +100,19 @@ export default defineComponent({
         },
         {
           title: '日期',
-          key: 'createdAt'
+          key: 'eventTime'
         },
         {
           title: '收支',
-          key: 'desc'
+          key: 'score'
         },
         {
           title: '详情',
-          key: 'what'
+          key: 'eventDetail'
         },
         {
-          title: '平台',
-          key: 'type'
+          title: '类型',
+          key: 'eventType'
         }
       ]
     }
@@ -137,37 +127,49 @@ export default defineComponent({
   },
   computed: {},
   methods: {
-    refresh () {
-      this.getData(this.params)
-    },
-    getData (params) {
-      // Simulating API response with data
-      const responseData = [
-        {
-          createdAt: '2023-10-01',
-          desc: 'Some description 1',
-          what: '数学课',
-          type: '学习任务'
-        },
-        {
-          createdAt: '2023-10-03',
-          desc: 'Some description 2',
-          what: '笔芯*10',
-          type: '积分商城'
-        }
-        // Add more data as needed
-      ]
-      this.listData = responseData
-    },
     pageChange (page) {
       this.params.page = page
     },
     PageSizeChange (limit) {
       this.params.limit = limit
+    },
+    mounted () {
+      // 从登录页面获取childId参数，并赋值给childId属性
+      this.childId = this.$route.query.childId
+      this.getData(this.childId) // 调用获取积分明细数据的方法
+    },
+    refresh () {
+      this.getData(this.params)
+    },
+    getData () {
+      console.log('调用了 getData 方法')
+      const childId = this.childId // 获取 childId 值
+
+      // 确保 childId 的值有效
+      if (childId === null || childId === undefined) {
+        console.error('childId 无效')
+        return
+      }
+      axios
+        .get(`http://localhost:8080/children/score-history/total-list/${childId}`, {})
+        .then(response => {
+          console.log(response.data.data)
+          if (response.data.success) {
+            this.$Message.success('查询成功！')
+            this.listData = response.data.data // 使用检索到的数据更新 listData
+          } else {
+            this.$Message.error('登录失败！')
+            console.error('登录失败：', response.data)
+            this.$Notice.warning({
+              title: '登录提示',
+              desc: '用户名/密码错误...'
+            })
+          }
+        })
+        .catch(error => {
+          console.error('登录请求失败：', error)
+        })
     }
-  },
-  created () {
-    this.getData(this.params)
   }
 })
 </script>
