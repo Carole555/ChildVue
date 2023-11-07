@@ -63,12 +63,17 @@
           if (valid) {
             // 构建用于发送给后端的登录数据
             const loginData = {
-              name: this.formValidate.name,
+              username: this.formValidate.name,
               password: this.formValidate.password
             }
-
             // 向后端发送登录请求
-            axios.post('/children/child/loginChild', loginData)
+            // eslint-disable-next-line no-undef
+            axios.post('http://localhost:8080/children/child/loginChild', null, {
+              params: {
+                username: this.formValidate.name,
+                password: this.formValidate.password
+              }
+            })
               .then(response => {
                 this.modal_loading = false
                 if (response.data.success) {
@@ -77,8 +82,9 @@
                   this.$router.push('/index')
                 } else {
                   this.$Message.error('登录失败!')
+                  console.error('登录失败:', loginData)
                   this.$Notice.warning({
-                    title: '登录提示',
+                    title: '登录提示123',
                     desc: '用户名/密码错误...'
                   })
                 }
@@ -86,6 +92,7 @@
               .catch(error => {
                 this.modal_loading = false
                 console.error('登录请求失败:', error)
+                console.error('登录请求失败:', loginData)
               })
           } else {
             this.modal_loading = false
