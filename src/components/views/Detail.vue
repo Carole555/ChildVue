@@ -164,11 +164,6 @@ export default defineComponent({
       this.getData(this.params)
     },
     getALLData () {
-      // const hasChild = this.$route.query.hasChild
-      // console.log('页面Child :', hasChild)
-      // const childId = hasChild.id
-      // console.log('调用了 getAllData 方法')
-      // console.log('detail页面Child ID:', childId)
       const childId = getUser().id
       // 确保 childId 的值有效
       if (childId === null || childId === undefined) {
