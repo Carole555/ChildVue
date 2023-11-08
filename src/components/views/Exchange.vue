@@ -297,12 +297,12 @@
       <div class="popup-content">
         <div class="content-container">
         <div class="image-container">
-          <img :src="imageUrl" alt="Image" class="image">
+          <img :src="getImgUrl(form.subPhoto)" alt="Image" class="image">
         </div>
         <div class="text-container">
-          <h3 class="image-name">{{ imageName }}</h3>
-          <p class="image-description">{{ imageDescription }}</p>
-          <p class="image-price">积分: {{ imagePrice }}</p>
+          <h3 class="image-name">{{ form.name }}</h3>
+          <p class="image-description">{{ form.content }}</p>
+          <p class="image-price">积分: {{ form.value }}</p>
           <div class="quantity-container">
             <button class="quantity-button" @click="decreaseQuantity">-</button>
             <span class="quantity">数量: {{ quantity }}</span>
@@ -338,24 +338,35 @@ export default defineComponent({
     return {
       dialogFormVisible: false,
       isExchangeSuccessVisible: false,
+      isExchangeFailVisible: false,
       quantity: 1,
       // 其他数据字段
-      imageUrl: '/static/img/fullstack.jpg',
-      imageName: '图片名称',
-      imageDescription: '图片描述',
-      imagePrice: 10
-     // 假设价格为10
+      form: {
+        id: '',
+        name: '',
+        subPhoto: '',
+        value: '',
+        content: ''
+      }
     }
   },
   computed: {
     totalPoints () {
       // 在这里根据需要计算总积分，并返回计算结果
       // 可以使用this关键字访问组件中的其他属性进行计算
-      return this.quantity * this.imagePrice
+      return this.quantity * this.form.value
     }
   },
   methods: {
-    clear () { },
+    clear () {
+      this.form = {
+        id: '',
+        name: '',
+        subPhoto: '',
+        value: '',
+        content: ''
+      }
+    },
     decreaseQuantity () {
       if (this.quantity > 1) {
         this.quantity--
@@ -368,6 +379,7 @@ export default defineComponent({
     exchange () {
       // 执行兑换操作，可以在这里添加相关逻辑
       // 兑换成功后显示兑换成功弹窗，并关闭当前弹窗
+      // if ()
       this.isExchangeSuccessVisible = true
       this.dialogFormVisible = false
     },
@@ -378,6 +390,9 @@ export default defineComponent({
       // 取消的事件处理逻辑
       // 可以在这里执行关闭弹窗的操作
       this.dialogFormVisible = false
+    },
+    getImgUrl (subPhoto) {
+      return `../static/img/${subPhoto}`
     }
     // 其他方法
   }
@@ -414,7 +429,7 @@ export default defineComponent({
 }
 
 .image {
-  width: 200px;
+  width: 160px;
   height: 160px;
   border-radius: 4px;
 }
