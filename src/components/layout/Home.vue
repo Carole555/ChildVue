@@ -145,6 +145,7 @@
       const hasChild = this.$route.query.hasChild
       console.log('home页面Child ID:', childId)
       console.log('home页面Child :', hasChild)
+      this.selectFn()
     },
     name: 'full',
     components: {
