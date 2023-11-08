@@ -9,7 +9,7 @@
           <a href="#" slot="extra" @click.prevent="refresh">
             <Icon type="ios-loop-strong"></Icon>
           </a>
-          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="getData">
+          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="getALLData">
             <el-tab-pane label="全部" name="first">
               <Table
                 :show-header="showHeader"
@@ -24,22 +24,22 @@
                 :show-header="showHeader"
                 :height="fixedHeader ? 300 : ''"
                 :size="tableSize"
-                :data="listDatatwo"
+                :data="listAddData"
                 :columns="columns2"
               ></Table>
             </el-tab-pane>
-            <el-tab-pane label="支出" name="third">
+            <el-tab-pane label="支出" name="third"  v-if="listPayData">
               <Row>
-                <template v-for="(card, index) in cardList">
+                <template v-for="(payData, index) in listPayData">
                   <Col :span="12">
                     <Card :body-style="{ padding: '20px', width: '200px', height: '200px', margin: '0 auto' }" class="horizontal-card">
                       <div class="horizontal-card-content">
-                        <img :src="card.image" class="image" />
+                        <img :src="`/static/img/${payData.subPhoto}`" class="image" />
                         <div class="horizontal-card-details">
-                          <div class="name">{{ card.name }}</div>
-                          <div class="points">{{ card.points }}</div>
+                          <div class="name">{{ payData.name }}</div>
+                          <div class="points">{{ payData.value }}积分</div>
                         </div>
-                        <div class="logistics">{{ card.logistics }}</div>
+                        <div class="logistics">{{ payData.status ? '订单已完成' : '订单进行中' }}</div>
                       </div>
                     </Card>
                   </Col>
@@ -96,13 +96,10 @@ export default defineComponent({
         page: 1,
         limit: 10
       },
-      listData: [], // Data source for the table
+      listData: [], // 收支
+      listAddData: [], // 收入
+      listPayData: [], // 支出
       columns1: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center'
-        },
         {
           title: '日期',
           key: 'eventTime'
@@ -118,6 +115,24 @@ export default defineComponent({
         {
           title: '类型',
           key: 'eventType'
+        }
+      ],
+      columns2: [
+        {
+          title: '日期',
+          key: 'date'
+        },
+        {
+          title: '收入积分',
+          key: 'num'
+        },
+        {
+          title: '任务名称',
+          key: 'taskName'
+        },
+        {
+          title: '类型',
+          key: 'kind'
         }
       ]
     }
@@ -146,8 +161,8 @@ export default defineComponent({
     refresh () {
       this.getData(this.params)
     },
-    getData () {
-      console.log('调用了 getData 方法')
+    getALLData () {
+      console.log('调用了 getAllData 方法')
       const childId = this.$route.query.childId
       console.log('detail页面Child ID:', childId)
 
@@ -156,6 +171,7 @@ export default defineComponent({
         console.error('childId 无效')
         return
       }
+      // 查看全部的请求体
       axios
         .get(`http://localhost:8080/children/score-history/total-list/${childId}`, {})
         .then(response => {
@@ -163,18 +179,48 @@ export default defineComponent({
           if (response.data.success) {
             this.$Message.success('查询成功！')
             this.listData = response.data.data // 使用检索到的数据更新 listData
+            // 查看收入的请求体
+            axios
+              .get(`http://localhost:8080/children/score/viewScore/${childId}`, {})
+              .then(newResponse => {
+                console.log('这是收入请求', newResponse.data)
+                if (response.data.success) {
+                  this.listAddData = newResponse.data.data // 使用检索到的数据更新 listData
+                  console.log('这是收入请求成功')
+                  axios
+                    .get(`http://localhost:8080/children/purchase/list/${childId}`, {})
+                    .then(payResponse => {
+                      console.log('这是支出请求', payResponse.data)
+                      if (response.data.success) {
+                        this.listPayData = payResponse.data.data
+                        console.log('这是支出请求成功,数据如下', this.listPayData)
+                      } else {
+                        this.$Message.error('查询支出信息查询失败！')
+                        console.error('查询支出信息查询失败', response.data)
+                      }
+                    })
+                    .catch(newError => {
+                      console.error('查询支出请求失败：', newError)
+                    })
+                } else {
+                  this.$Message.error('查询收入信息查询失败！')
+                  console.error('查询收入信息查询失败', response.data)
+                }
+              })
+              .catch(newError => {
+                console.error('查询收入请求失败：', newError)
+              })
           } else {
-            this.$Message.error('登录失败！')
-            console.error('登录失败：', response.data)
-            this.$Notice.warning({
-              title: '登录提示',
-              desc: '用户名/密码错误...'
-            })
+            this.$Message.error('全部明细查询失败！')
+            console.error('全部明细查询失败：', response.data)
           }
         })
         .catch(error => {
-          console.error('登录请求失败：', error)
+          console.error('查询全部收支请求失败：', error)
         })
+    },
+    getPayData () {
+      console.log('调用了 getPayData 方法')
     }
   }
 })
@@ -238,7 +284,7 @@ export default defineComponent({
 }
 
 .logistics {
-  font-size: 12px; /* 调整文字大小 */
+  font-size: 20px; /* 调整文字大小 */
   color: #6b778c;
   margin-top: 10px;
 }
