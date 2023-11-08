@@ -74,8 +74,8 @@
   export default {
     props: ['childId'],
     mounted () {
-      console.log('props:', this.childId)
-      // 或者将 childId 存储到组件的数据属性中，以供模板使用
+      const childId = this.$route.query.childId
+      console.log('Child ID:', childId)
     },
     name: 'index',
     components: {IEcharts},

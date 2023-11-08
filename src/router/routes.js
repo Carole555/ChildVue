@@ -21,6 +21,7 @@ const routes = [
     name: 'home',
     component: Home,
     redirect: '/index',
+    props: true, // 启用 props 传参
     children: [
       {
         path: '/index',

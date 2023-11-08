@@ -18,11 +18,15 @@
                 <i class="icon iconfont " :class="item.icon ? item.icon :'icon-collection'"></i>
                 {{item.name}}
               </template>
+<!--              首页-->
               <Menu-item :name="sub.path" v-for="(sub,i) in item.children" :key="i" v-if="!sub.hidden">
                 <i class="icon iconfont " :class="sub.icon ? sub.icon : 'icon-collection'"></i>
                 {{sub.name}}
               </Menu-item>
+              <!--              首页-->
+
             </Submenu>
+            <!--              其他导航栏-->
             <div>
               <Menu-item :name="item.path" :key="index"
                          v-if="item.children.length==0 && !item.hidden && item.level!=0 ">
@@ -30,6 +34,7 @@
                 {{item.name}}
               </Menu-item>
             </div>
+            <!--              其他导航栏-->
           </div>
         </Menu>
       </nav-bar>
@@ -132,8 +137,12 @@
   import Container from '@/components/layout/container/Container'
   import menu from '@/router/menu'
   import Cookies from 'js-cookie'
-
   export default {
+    props: ['childId'],
+    mounted () {
+      const childId = this.$route.query.childId
+      console.log('home页面Child ID:', childId)
+    },
     name: 'full',
     components: {
       THeader,
@@ -152,6 +161,7 @@
         }
       }
       return {
+        storedChildId: '', // 这是用来储存登录页面传过来的childId的
         theme: 'dark', // 主题
         themeBool: true,
         modalUser: false,
@@ -185,10 +195,12 @@
         return this.$store.state.app.langList
       }
     },
-    mounted () {
-
-    },
     methods: {
+      // 传给detial页面childId
+      goToDetailPage () {
+        this.$router.push({ path: '/detail', query: { childId: this.storedChildId } })
+        console.log('进入了goToDetailPage', this.storedChildId)
+      },
       // 查看个人信息密码验证
       checkUser (name) {
         this.modal_loading = true
@@ -219,9 +231,9 @@
        */
       selectFn (a) {
         console.log(a, this.$route.path)
-        this.$router.push({
-          path: a
-        })
+        console.log(this.$route.query.childId)
+        this.$router.push({ path: a, query: { childId: this.$route.query.childId } })
+        // this.$router.push({path: a})
       },
       /**
        *退出

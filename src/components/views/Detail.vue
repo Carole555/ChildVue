@@ -61,6 +61,11 @@ import axios from 'axios'
 export default defineComponent({
   name: 'list',
   components: {},
+  props: ['childId'],
+  mounted () {
+    const childId = this.$route.query.childId
+    console.log('Detail页面Child ID:', childId)
+  },
   data () {
     return {
       childId: null, // 用于保存从登陆页面传的childId的属性
@@ -143,7 +148,8 @@ export default defineComponent({
     },
     getData () {
       console.log('调用了 getData 方法')
-      const childId = this.childId // 获取 childId 值
+      const childId = this.$route.query.childId
+      console.log('detail页面Child ID:', childId)
 
       // 确保 childId 的值有效
       if (childId === null || childId === undefined) {
