@@ -4,7 +4,7 @@
       <h1 class="title">{{courses.name}}</h1>
       <div class="video-container">
         <!-- 在这里放置视频 -->
-        <video src="`../static/video/${courses.video}`" width="2000" height="320"  controls></video>
+        <video :src="`/static/video/${courses.video}`" width="2000" height="320"  controls></video>
       </div>
       <div class="requirements">
         <h2>视频要求：</h2>
