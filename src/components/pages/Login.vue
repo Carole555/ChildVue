@@ -35,6 +35,7 @@
 <script>
   import axios from 'axios'
   import Cookies from 'js-cookie'
+  import { setUser } from '@/common/utils'
   export default {
     name: 'login',
     data () {
@@ -79,22 +80,12 @@
                 if (response.data.code === '666') {
                   this.$Message.success('登录成功!')
                   Cookies.set('token', response.data.token)
-                  const childId = response.data.data.id // 假设后端返回的childId
+                  // const childId = response.data.data.id // 假设后端返回的childId
                   const hasChild = response.data.data
                   console.log(response.data.data.id)
-                  this.$router.push({ name: 'home', query: { childId } })
-                  this.$router.push({ name: 'index', query: { childId } })
-                  this.$router.push({name: 'index', query: { hasChild }})
-                  this.$router.push({name: 'home', query: {hasChild}})
-                  // this.$router.push({name: 'tasks', query: { hasChild }})
-                  // this.$router.push({name: 'detail', query: {hasChild}})
-                  // this.$router.push({name: 'chart', query: { hasChild }})
-                  // this.$router.push({name: 'Course', query: {hasChild}})
-                  // this.$router.push({name: 'table', query: { hasChild }})
-                  // this.$router.push({name: 'icon', query: {hasChild}})
-                  // this.$router.push({name: 'filter', query: { hasChild }})
-                  // this.$router.push({name: 'notFound', query: {hasChild}})
-                  // this.$router.push({name: 'index', query: {hasChild}})
+                  setUser(hasChild)
+                  this.$router.push({name: 'index'})
+                  this.$router.push({name: 'home'})
                 } else {
                   this.$Message.error('登录失败!')
                   console.error('登录失败:', response.data)
