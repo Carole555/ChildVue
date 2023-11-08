@@ -327,6 +327,13 @@
         <button class="close-button" @click="closeExchangeSuccessPopup">关闭</button>
       </div>
     </div>
+    <div v-if="isExchangeFailVisible" class="exchange-success-popup">
+      <div class="popup-content">
+        <h3 class="success-message">兑换失败</h3>
+        <h3 class="success-message">请确认当前积分是否足够！</h3>
+        <button class="close-button" @click="closeExchangeFailPopup">关闭</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -357,6 +364,12 @@ export default defineComponent({
       return this.quantity * this.form.value
     }
   },
+  mounted: function () {
+    const childId = this.$route.query.childId
+    console.log('Child ID:', childId)
+    const hasChild = this.$route.query.hasChild
+    console.log('haschildzsh', hasChild)
+  },
   methods: {
     clear () {
       this.form = {
@@ -379,12 +392,31 @@ export default defineComponent({
     exchange () {
       // 执行兑换操作，可以在这里添加相关逻辑
       // 兑换成功后显示兑换成功弹窗，并关闭当前弹窗
-      // if ()
-      this.isExchangeSuccessVisible = true
-      this.dialogFormVisible = false
+      const hasChild = this.$route.query.hasChild
+      console.log('haschildzsh', hasChild)
+      if (hasChild.score >= this.totalPoints) {
+        this.$axios
+          .post('http://localhost:8080/children/purchase/add', {
+            subId: this.form.id,
+            subNum: this.quantity,
+            childId: hasChild.id,
+            value: this.form.value
+          }).then(response => {
+            if (response.data.success) {
+              this.isExchangeSuccessVisible = true
+              this.dialogFormVisible = false
+            }
+          })
+      } else {
+        this.isExchangeFailVisible = true
+        this.dialogFormVisible = false
+      }
     },
     closeExchangeSuccessPopup () {
       this.isExchangeSuccessVisible = false
+    },
+    closeExchangeFailPopup () {
+      this.isExchangeFailVisible = false
     },
     cancel () {
       // 取消的事件处理逻辑
