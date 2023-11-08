@@ -40,6 +40,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import {defineComponent} from 'vue'
+import {getUser} from '../../common/utils'
 export default defineComponent({
   name: 'list',
   components: {},
@@ -84,13 +85,9 @@ export default defineComponent({
       console.log('调用了 showData 方法')
       const hasChild = this.$route.query.hasChild
       console.log('页面Child :', hasChild)
-      const grade = hasChild.grade
+      const grade = getUser().grade
       console.log(grade)
       // 确保 childId 的值有效
-      if (hasChild === null || hasChild === undefined) {
-        console.error('child 无效')
-        return
-      }
       this.loading = true
       axios.get(`http://localhost:8080/children/task/verifyGradeTask/${grade}`, {})
         .then(response => {
@@ -110,8 +107,9 @@ export default defineComponent({
         })
     },
     navigateToCourse (courseId) {
+      console.log(courseId)
+      this.$router.push({name: 'filter', query: {courseId}})
       // Redirect to the course page for the selected course
-      this.$router.push({path: `/filter/${courseId}`, query: { courseId }})
     },
     previousPage () {
       if (this.currentPage > 1) {

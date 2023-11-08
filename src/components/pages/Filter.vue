@@ -1,14 +1,14 @@
 <template>
   <div class="page-container">
     <div class="content-container">
-      <h1 class="title">标题</h1>
+      <h1 class="title">{{courses.name}}</h1>
       <div class="video-container">
         <!-- 在这里放置视频 -->
-        <video src="../../../static/video/demo.mp4" width="2000" height="320"  controls></video>
+        <video src="`../static/video/${courses.video}`" width="2000" height="320"  controls></video>
       </div>
       <div class="requirements">
         <h2>视频要求：</h2>
-        <p>视频要求的详细描述内容...</p>
+        <p>{{ courses.content }}</p>
       </div>
       <div class="submission-container">
         <h2>提交部分</h2>
@@ -34,13 +34,43 @@
   </div>
 </template>
 <script>
-export default {
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import {defineComponent} from 'vue'
+export default defineComponent({
+  mounted () {
+    const id = this.$route.query.courseId
+    console.log('id :', id)
+    this.showall()
+  },
   data () {
     return {
+      id: null,
+      courses: null,
       file: null
     }
   },
   methods: {
+    showall () {
+      const id = this.$route.query.courseId
+      console.log('idid :', id)
+      axios.get(`http://localhost:8080/children/task/QueryOneTask/${id}`, {})
+        .then(response => {
+          this.loading = false
+          if (response.data.code === '666') {
+            this.$Message.success('成功!')
+            Cookies.set('token', response.data.token)
+            this.courses = response.data.data
+            console.log(this.courses)
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          console.error('失败:', error)
+        })
+    },
     handleRemove (file, fileList) {
       console.log(file, fileList)
     },
@@ -65,7 +95,7 @@ export default {
     }
 
   }
-}
+})
 </script>
 <style>
 .upload-container {
