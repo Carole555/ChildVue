@@ -11,14 +11,14 @@ import Commodities from './Commodities.vue'
 
 export default defineComponent({
   name: 'AppCommodity',
-  components: {Commodities},
-  mounted () {
-    const childId = this.$route.query.childId
-    const hasChild = this.$route.query.hasChild
-    console.log('Child ID:', childId)
-    console.log('haschild111', hasChild)
-    // this.$router.push({name: 'commodities', query: {hasChild}})
-  }
+  components: {Commodities}
+  // mounted () {
+  //   const childId = this.$route.query.childId
+  //   const hasChild = this.$route.query.hasChild
+  //   console.log('Child ID:', childId)
+  //   console.log('haschild111', hasChild)
+  //   // this.$router.push({name: 'commodities', query: {hasChild}})
+  // }
 })
 </script>
 <style lang="less" scoped>

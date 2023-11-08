@@ -50,10 +50,10 @@ export default defineComponent({
   },
   mounted: function () {
     this.loadCommodities()
-    const childId = this.$route.query.childId
-    const hasChild = this.$route.query.hasChild
-    console.log('Child ID:123456', childId)
-    console.log('haschild1234', hasChild)
+    // const childId = this.$route.query.childId
+    // const hasChild = this.$route.query.hasChild
+    // console.log('Child ID:123456', childId)
+    // console.log('haschild1234', hasChild)
     // this.$router.push({name: 'exchange', query: {hasChild}})
   },
   computed: {
