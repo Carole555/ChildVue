@@ -15,12 +15,12 @@ Vue.use(iView)
 import api from './api/index.js'
 Vue.use(api)
 import store from './store'
+import stores from '../store'
 import Cookies from 'js-cookie'
 import 'iview/dist/styles/iview.css' // 使用 CSS
 import './assets/styles/layout/layout.less' // 引入布局样式
 import './assets/styles/cover/cover.less' // 覆盖样式
 import './assets/styles/base/base.less'
-
 import * as filters from './common/filter'
 // register global utility filters.
 Object.keys(filters).forEach(key => {
@@ -71,6 +71,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  stores,
   template: '<App/>',
   components: {App}
 })

@@ -21,12 +21,12 @@
     </div>
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
-        <div class="course-label" :style="{ backgroundColor: course.required ? 'green' : 'yellow', color: course.required ? 'white' : 'black' }">
-          {{ course.required ? '必做' : '选做' }}
+        <div class="course-label" :style="{ backgroundColor: course.is_must_do ? 'green' : 'yellow', color: course.is_must_do ? 'white' : 'black' }">
+          {{ course.is_must_do ? 1 : 0 }}
         </div>
-        <img :src="course.image" alt="Course Image" class="course-image" />
+        <img :src="course.task_photo" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ course.name }}</h2>
-        <p class="course-description">{{ course.description }}</p>
+        <p class="course-description">{{ course.content }}</p>
       </div>
     </div>
     <div class="pagination">
@@ -37,56 +37,26 @@
 </template>
 
 <script>
+import axios from 'axios'
+import Cookies from 'js-cookie'
+
 export default {
   data () {
     return {
-      courses: [
-        {
-          id: 1,
-          name: 'Mathematics',
-          image: '/static/img/fullstack.jpg',
-          description: 'Learn the fundamentals of mathematics and solve complex problems.',
-          required: true // Added required property
-        },
-        {
-          id: 2,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 6,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 3,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 4,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 5,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        }
-        // Add more courses here...
-      ],
+      courses: [],
       currentPage: 1,
       coursesPerPage: 10
+    }
+  },
+  watch: {
+    /**
+     * @params 监听参数变化重新获取数据
+     * */
+    params: {
+      handler () {
+        this.showall()
+      },
+      deep: true
     }
   },
   computed: {
@@ -100,6 +70,23 @@ export default {
     }
   },
   methods: {
+    showall () {
+      axios.post('http://localhost:8080/children/task/showAll', null)
+        .then(response => {
+          this.modal_loading = false
+          if (response.data.code === '666') {
+            this.$Message.success('成功!')
+            Cookies.set('token', response.data.token)
+            this.courses = response.data
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+        .catch(error => {
+          this.modal_loading = false
+          console.error('失败:', error)
+        })
+    },
     navigateToCourse (courseId) {
       // Redirect to the course page for the selected course
       this.$router.push(`/course/${courseId}`)

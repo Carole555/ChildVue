@@ -5,6 +5,8 @@
         <el-button  class="my-task-button" @click="toMyTask" type="primary" plain>我的任务</el-button>
       </el-row>
     </div>
+
+
     <h1>全部任务</h1>
     <div class="search-bar">
       <el-row type="flex" justify="center" align="middle">
@@ -19,12 +21,12 @@
     </div>
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
-        <div class="course-label" :style="{ backgroundColor: course.required ? 'green' : 'yellow', color: course.required ? 'white' : 'black' }">
-          {{ course.required ? '必做' : '选做' }}
+        <div class="course-label" :style="{ backgroundColor: course.isMustDo ? 'green' : 'yellow', color: course.isMustDo ? 'white' : 'black' }">
+          {{ course.isMustDo ? '必做' : '选做' }}
         </div>
-        <img :src="course.image" alt="Course Image" class="course-image" />
+        <img :src="course.taskPhoto" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ course.name }}</h2>
-        <p class="course-description">{{ course.description }}</p>
+        <p class="course-description">{{ course.content }}</p>
       </div>
     </div>
     <div class="pagination">
@@ -35,56 +37,36 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import {defineComponent} from 'vue'
+export default defineComponent({
+  name: 'list',
+  components: {},
+  props: ['hasChild'],
+  mounted () {
+    const hasChild = this.$route.query.hasChild
+    console.log('Detail页面Child :', hasChild)
+    this.showall()
+  },
   data () {
     return {
-      courses: [
-        {
-          id: 1,
-          name: 'Mathematics',
-          image: '/static/img/fullstack.jpg',
-          description: 'Learn the fundamentals of mathematics and solve complex problems.',
-          required: true // Added required property
-        },
-        {
-          id: 2,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 6,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 3,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 4,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 5,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        }
-        // Add more courses here...
-      ],
+      hasChild: null,
+      courses: [],
       currentPage: 1,
-      coursesPerPage: 10
+      coursesPerPage: 10,
+      loading: false
+    }
+  },
+  watch: {
+    /**
+     * @params 监听参数变化重新获取数据
+     * */
+    params: {
+      handler (val) {
+        this.showall(val)
+      },
+      deep: true
     }
   },
   computed: {
@@ -98,6 +80,34 @@ export default {
     }
   },
   methods: {
+    showall () {
+      console.log('调用了 showData 方法')
+      const hasChild = this.$route.query.hasChild
+      console.log('页面Child :', hasChild)
+      const grade = hasChild.grade
+      // 确保 childId 的值有效
+      if (hasChild === null || hasChild === undefined) {
+        console.error('child 无效')
+        return
+      }
+      this.loading = true
+      axios.get(`http://localhost:8080/children/task/verifyGradeTask/${grade}`, {})
+        .then(response => {
+          this.loading = false
+          if (response.data.code === '666') {
+            this.$Message.success('成功!')
+            Cookies.set('token', response.data.token)
+            this.courses = response.data.data
+            console.log(this.courses)
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          console.error('失败:', error)
+        })
+    },
     navigateToCourse (courseId) {
       // Redirect to the course page for the selected course
       this.$router.push(`/course/${courseId}`)
@@ -116,7 +126,7 @@ export default {
       this.$router.push('/Tasks')
     }
   }
-}
+})
 </script>
 
 <style scoped>
@@ -124,13 +134,13 @@ export default {
 .my-task {
   display: flex;
   justify-content: flex-end;
-  top: 10px; /* 距离容器顶部的距离 */
+  top: 28px; /* 距离容器顶部的距离 */
   right: 10px; /* 距离容器右侧的距离 */
 }
 .my-task-button {
   position: absolute;
-  top: 1px; /* 距离容器顶部的距离 */
-  right: 1px; /* 距离容器右侧的距离 */
+  top: 40px; /* 距离容器顶部的距离 */
+  right: 10px; /* 距离容器右侧的距离 */
 }
 .list {
   text-align: center;
@@ -223,4 +233,3 @@ export default {
   margin: 0 5px;
 }
 </style>
-

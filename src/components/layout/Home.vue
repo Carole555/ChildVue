@@ -139,9 +139,12 @@
   import Cookies from 'js-cookie'
   export default {
     props: ['childId'],
+    prop: ['hasChild'],
     mounted () {
       const childId = this.$route.query.childId
+      const hasChild = this.$route.query.hasChild
       console.log('home页面Child ID:', childId)
+      console.log('home页面Child :', hasChild)
     },
     name: 'full',
     components: {
@@ -162,6 +165,7 @@
       }
       return {
         storedChildId: '', // 这是用来储存登录页面传过来的childId的
+        storechild: null,
         theme: 'dark', // 主题
         themeBool: true,
         modalUser: false,
@@ -232,7 +236,9 @@
       selectFn (a) {
         console.log(a, this.$route.path)
         console.log(this.$route.query.childId)
+        console.log(this.$route.query.hasChild)
         this.$router.push({ path: a, query: { childId: this.$route.query.childId } })
+        this.$router.push({ path: a, query: { hasChild: this.$route.query.hasChild } })
         // this.$router.push({path: a})
       },
       /**

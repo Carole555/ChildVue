@@ -4,7 +4,6 @@ import Router from 'vue-router' // 修改导入的类名为 Router
 import iView from 'iview'
 import routes from './routes'
 import Cookies from 'js-cookie'
-
 Vue.use(iView)
 Vue.use(Router) // 修改使用的类名为 Router
 

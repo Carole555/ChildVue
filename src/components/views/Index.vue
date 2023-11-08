@@ -73,9 +73,12 @@
   import IEcharts from 'vue-echarts-v3/src/full.js'
   export default {
     props: ['childId'],
+    propsdata: ['hasChild'],
     mounted () {
       const childId = this.$route.query.childId
+      const hasChild = this.$route.query.hasChild
       console.log('Child ID:', childId)
+      console.log('haschild', hasChild)
     },
     name: 'index',
     components: {IEcharts},
@@ -134,10 +137,14 @@
        * */
       getData () {
         const childId = this.childId // 获取 childId 值
-
+        const hasChild = this.hasChild
         // 确保 childId 的值有效
         if (childId === null || childId === undefined) {
           console.error('childId 无效')
+          return
+        }
+        if (hasChild === null || hasChild === undefined) {
+          console.error('child 无效')
           return
         }
       },
