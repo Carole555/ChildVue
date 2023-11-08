@@ -6,20 +6,20 @@
                   :key="item.id">
         <p slot="content" style="font-size: 14px;margin-bottom: 6px;">{{item.name}}</p>
         <p slot="content" style="font-size: 13px;margin-bottom: 6px">
-          <span>{{item.price}}积分</span>
+          <span>{{item.value}}积分</span>
         </p>
-        <p slot="content" style="width: 300px" class="abstract">{{item.des}}</p>
+        <p slot="content" style="width: 300px" class="abstract">{{item.content}}</p>
         <el-card style="width: calc(100% / 6 - 20px);margin-bottom: 20px;height: 225px;float: left;margin-right: 15px" class="commodity"
                  bodyStyle="padding:10px" shadow="hover">
           <div class="picture" @click="exchange(item)">
-            <img :src="item.picture" alt="图片" style="width: 160px; height: 160px;">
+            <img :src="getImgUrl(item.subPhoto)" alt="图片" style="width: 160px; height: 160px;">
           </div>
           <div class="info">
             <div class="name">
               <a href="">{{item.name}}</a>
             </div>
           </div>
-          <div class="price">{{item.price}}积分</div>
+          <div class="price">{{item.value}}积分</div>
         </el-card>
       </el-tooltip>
       <exchange @onSubmit="loadCommodities()" ref="edit"></exchange>
@@ -43,42 +43,13 @@ export default defineComponent({
   components: {Exchange},
   data () {
     return {
-      commodities: [
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' },
-        { id: 1, name: '商品1', price: 100, des: '商品1描述', picture: '/static/img/fullstack.jpg' },
-        { id: 2, name: '商品2', price: 200, des: '商品2描述', picture: '/static/img/fullstack.jpg' },
-        { id: 3, name: '商品3', price: 300, des: '商品3描述', picture: '/static/img/fullstack.jpg' }
-        // 添加更多的商品对象
-      ],
+      commodities: [],
       currentPage: 1,
       pageSize: 18
     }
+  },
+  mounted: function () {
+    this.loadCommodities()
   },
   computed: {
     currentPageItems () {
@@ -87,15 +58,16 @@ export default defineComponent({
       return this.commodities.slice(startIndex, endIndex)
     }
   },
-  mounted: function () {
-    this.loadCommodities()
-  },
   methods: {
     loadCommodities () {
-      var _this = this
-      this.$axios.get('/commodities').then(resp => {
-        if (resp && resp.status === 200) {
-          _this.commodities = resp.data
+      this.$axios.get('http://localhost:8080/children/subject/viewAllSubject').then(response => {
+        if (response.data.code === '666') {
+          this.$Message.success('商品检索成功!')
+          this.commodities = response.data.data
+          console.log(typeof this.commodities)
+          console.log(this.commodities)
+        } else if (response.data.code === '0') {
+          this.$Message.success('商品检索失败!')
         }
       })
     },
@@ -104,9 +76,20 @@ export default defineComponent({
     },
     exchange (item) {
       this.$refs.edit.dialogFormVisible = true
+      this.$refs.edit.form = {
+        id: item.id,
+        name: item.name,
+        subPhoto: item.subPhoto,
+        value: item.value,
+        content: item.content
+      }
+    },
+    getImgUrl (subPhoto) {
+      return `../static/img/${subPhoto}`
     }
   }
 })
+
 </script>
 
 <style scoped>
