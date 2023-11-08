@@ -57,6 +57,7 @@
 <script>
 import {defineComponent} from 'vue'
 import axios from 'axios'
+import {getUser} from '../../common/utils'
 
 export default defineComponent({
   name: 'list',
@@ -163,12 +164,12 @@ export default defineComponent({
       this.getData(this.params)
     },
     getALLData () {
-      const hasChild = this.$route.query.hasChild
-      console.log('页面Child :', hasChild)
-      const childId = hasChild.id
-      console.log('调用了 getAllData 方法')
-      console.log('detail页面Child ID:', childId)
-
+      // const hasChild = this.$route.query.hasChild
+      // console.log('页面Child :', hasChild)
+      // const childId = hasChild.id
+      // console.log('调用了 getAllData 方法')
+      // console.log('detail页面Child ID:', childId)
+      const childId = getUser().id
       // 确保 childId 的值有效
       if (childId === null || childId === undefined) {
         console.error('childId 无效')
