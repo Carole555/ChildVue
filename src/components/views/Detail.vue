@@ -61,10 +61,11 @@ import axios from 'axios'
 export default defineComponent({
   name: 'list',
   components: {},
-  props: ['childId'],
+  props: ['hasChild'],
   mounted () {
-    const childId = this.$route.query.childId
-    console.log('Detail页面Child ID:', childId)
+    const hasChild = this.$route.query.hasChild
+    console.log('Detail页面Child :', hasChild)
+    this.getALLData()
   },
   data () {
     return {
@@ -162,8 +163,10 @@ export default defineComponent({
       this.getData(this.params)
     },
     getALLData () {
+      const hasChild = this.$route.query.hasChild
+      console.log('页面Child :', hasChild)
+      const childId = hasChild.id
       console.log('调用了 getAllData 方法')
-      const childId = this.$route.query.childId
       console.log('detail页面Child ID:', childId)
 
       // 确保 childId 的值有效

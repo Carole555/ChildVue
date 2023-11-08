@@ -40,7 +40,8 @@ const routes = [
         component: Chart,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true // 启用 props 传参
       },
       {
         path: '/Course',
@@ -48,7 +49,8 @@ const routes = [
         component: Course,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true // 启用 props 传参
       },
       {
         path: '/list',
@@ -56,7 +58,8 @@ const routes = [
         component: List,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true // 启用 props 传参
       },
       {
         path: '/detail',
@@ -90,7 +93,8 @@ const routes = [
         component: Filter,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true // 启用 props 传参
       },
       {
         path: '/notFound',
