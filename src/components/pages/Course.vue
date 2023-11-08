@@ -24,7 +24,7 @@
         <div class="course-label" :style="{ backgroundColor: course.isMustDo ? 'green' : 'yellow', color: course.isMustDo ? 'white' : 'black' }">
           {{ course.isMustDo ? '必做' : '选做' }}
         </div>
-        <img :src="course.taskPhoto" alt="Course Image" class="course-image" />
+        <img :src="`/static/img/${course.taskPhoto}`" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ course.name }}</h2>
         <p class="course-description">{{ course.content }}</p>
       </div>
@@ -85,6 +85,7 @@ export default defineComponent({
       const hasChild = this.$route.query.hasChild
       console.log('页面Child :', hasChild)
       const grade = hasChild.grade
+      console.log(grade)
       // 确保 childId 的值有效
       if (hasChild === null || hasChild === undefined) {
         console.error('child 无效')
@@ -110,7 +111,7 @@ export default defineComponent({
     },
     navigateToCourse (courseId) {
       // Redirect to the course page for the selected course
-      this.$router.push(`/course/${courseId}`)
+      this.$router.push({path: `/filter/${courseId}`, query: { courseId }})
     },
     previousPage () {
       if (this.currentPage > 1) {

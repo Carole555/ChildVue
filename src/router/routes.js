@@ -41,7 +41,7 @@ const routes = [
         meta: {
           requiresAuth: true // 是否需要登录
         },
-        props: true // 启用 props 传参
+        props: true
       },
       {
         path: '/Course',
@@ -49,8 +49,7 @@ const routes = [
         component: Course,
         meta: {
           requiresAuth: true // 是否需要登录
-        },
-        props: true // 启用 props 传参
+        }
       },
       {
         path: '/list',
@@ -59,7 +58,7 @@ const routes = [
         meta: {
           requiresAuth: true // 是否需要登录
         },
-        props: true // 启用 props 传参
+        props: true
       },
       {
         path: '/detail',
@@ -77,7 +76,8 @@ const routes = [
         component: Table,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       },
       {
         path: '/icon',
@@ -85,7 +85,8 @@ const routes = [
         component: Icon,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       },
       {
         path: '/filter',
@@ -94,7 +95,7 @@ const routes = [
         meta: {
           requiresAuth: true // 是否需要登录
         },
-        props: true // 启用 props 传参
+        props: true
       },
       {
         path: '/notFound',
@@ -102,7 +103,8 @@ const routes = [
         component: NotFound,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       },
       {
         path: '/tasks',
@@ -110,7 +112,8 @@ const routes = [
         component: Tasks,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       },
       {
         path: '/tasks/:taskId',
@@ -118,7 +121,8 @@ const routes = [
         component: Tasks,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       },
       {
         path: '/myTask',
@@ -126,7 +130,8 @@ const routes = [
         component: MyTask,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       },
       {
         path: '/course/:courseId',
@@ -134,7 +139,8 @@ const routes = [
         component: Course,
         meta: {
           requiresAuth: true // 是否需要登录
-        }
+        },
+        props: true
       }
     ]
   },
