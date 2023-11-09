@@ -19,7 +19,7 @@
       </Row>
       </Col>
       <Col :md='{span:16}'>
-      <Card>
+      <Card style="height: 150px">
         <p slot="title">
           每日之星
         </p>
@@ -38,19 +38,20 @@
 
     <Row :gutter="8">
       <Col :md='{span:8}'>
-      <Card style="height: 320px">
+      <Card style="height: 315px">
         <p slot="title">
           {{num.pendingTasks}}个待批改，{{num.notPassedTasks}}个未通过，{{num.passedTasks}}个已通过
         </p>
         <a href="#" slot="extra" @click.prevent="refresh">
           <Icon type="ios-loop-strong"></Icon>
         </a>
-        <Steps :current="2" direction="vertical" size="small">
-          <Step title="已完成" content="这里是该步骤的描述信息"></Step>
-          <Step title="已完成" content="这里是该步骤的描述信息"></Step>
-          <Step title="进行中" content="这里是该步骤的描述信息"></Step>
-          <Step title="待进行" content="这里是该步骤的描述信息"></Step>
-        </Steps>
+        <div class="block">
+          <el-carousel height="162px">
+              <el-carousel-item v-for="(image, index) in imageList" :key="index">
+                <img :src="image.url" :alt="image.alt" class="carousel-image">
+              </el-carousel-item>
+          </el-carousel>
+        </div>
       </Card>
       </Col>
       <Col :md='{span:16}'>
@@ -88,8 +89,15 @@
     components: {IEcharts},
     data () {
       return {
+        imageList: [
+          { url: '/static/img/1.png', alt: 'Image 1' },
+          { url: '/static/img/2.png', alt: 'Image 2' },
+          { url: '/static/img/3.png', alt: 'Image 3' },
+          { url: '/static/img/4.png', alt: 'Image 4' }
+        ],
         num: null,
         childId: null, // 初始化 childId 为 null 或合适的初始值
+        childScore: getUser().score,
         params: {
           page: 1,
           limit: 10
@@ -105,7 +113,7 @@
           {
             icon: 'ios-star',
             name: '拥有积分',
-            count: '2111'
+            count: getUser().score
           },
           {
             icon: 'ios-email',
@@ -183,6 +191,20 @@
   }
 </script>
 <style lang="less" scoped>
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+}
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
+}
   .cardMessage {
     .ivu-icon {
       font-size: 38px;
@@ -194,4 +216,8 @@
   .echarts {
     height: 280px;
   }
+.carousel-image {
+  width: 368px; /* 设置宽度为100% */
+  height: 162px; /* 自动计算高度，保持原始比例 */
+}
 </style>
