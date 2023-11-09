@@ -90,6 +90,7 @@
       return {
         num: null,
         childId: null, // 初始化 childId 为 null 或合适的初始值
+        childScore: getUser().score,
         params: {
           page: 1,
           limit: 10
@@ -105,7 +106,7 @@
           {
             icon: 'ios-star',
             name: '拥有积分',
-            count: '2111'
+            count: getUser().score
           },
           {
             icon: 'ios-email',
