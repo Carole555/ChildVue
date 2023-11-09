@@ -40,18 +40,17 @@
       <Col :md='{span:8}'>
       <Card style="height: 320px">
         <p slot="title">
-          10个已经完成，2个待完成，1个正在进行中
+          {{num.pendingTasks}}个待批改，{{num.notPassedTasks}}个未通过，{{num.passedTasks}}个已通过
         </p>
         <a href="#" slot="extra" @click.prevent="refresh">
           <Icon type="ios-loop-strong"></Icon>
         </a>
-<!--        <Steps :current="2" direction="vertical" size="small">-->
-<!--          <Step title="已完成" content="这里是该步骤的描述信息"></Step>-->
-<!--          <Step title="已完成" content="这里是该步骤的描述信息"></Step>-->
-<!--          <Step title="进行中" content="这里是该步骤的描述信息"></Step>-->
-<!--          <Step title="待进行" content="这里是该步骤的描述信息"></Step>-->
-<!--        </Steps>-->
-        <el-calendar v-model="value" class="custom-calendar"></el-calendar>
+        <Steps :current="2" direction="vertical" size="small">
+          <Step title="已完成" content="这里是该步骤的描述信息"></Step>
+          <Step title="已完成" content="这里是该步骤的描述信息"></Step>
+          <Step title="进行中" content="这里是该步骤的描述信息"></Step>
+          <Step title="待进行" content="这里是该步骤的描述信息"></Step>
+        </Steps>
       </Card>
       </Col>
       <Col :md='{span:16}'>
@@ -72,6 +71,8 @@
 </template>
 <script>
   import IEcharts from 'vue-echarts-v3/src/full.js'
+  import axios from 'axios'
+  import Cookies from 'js-cookie'
   import {getUser} from '../../common/utils'
   export default {
     props: ['childId'],
@@ -81,13 +82,13 @@
       const hasChild = this.$route.query.hasChild
       console.log('Child ID:', childId)
       console.log('haschild', hasChild)
+      this.getNum()
     },
     name: 'index',
     components: {IEcharts},
     data () {
       return {
-        value: new Date(),
-        childScore: getUser().score,
+        num: null,
         childId: null, // 初始化 childId 为 null 或合适的初始值
         params: {
           page: 1,
@@ -104,7 +105,7 @@
           {
             icon: 'ios-star',
             name: '拥有积分',
-            count: getUser().score
+            count: '2111'
           },
           {
             icon: 'ios-email',
@@ -127,7 +128,7 @@
           },
           yAxis: {},
           series: [{
-            name: 'Sales',
+            name: '详情',
             type: 'bar',
             data: [5, 2, 3, 4, 3, 3]
           }]
@@ -139,6 +140,26 @@
       /**
        * 刷新页面请求
        * */
+      getNum () {
+        const childId = getUser().id
+        console.log(childId)
+        axios.get(`http://localhost:8080/children/task-child/count/${childId}`, {})
+          .then(response => {
+            this.loading = false
+            if (response.data.success) {
+              this.$Message.success('成功!')
+              Cookies.set('token', response.data.token)
+              this.num = response.data.data
+              console.log(this.num)
+            } else {
+              this.$Message.error('失败!')
+            }
+          })
+          .catch(error => {
+            this.loading = false
+            console.error('失败:', error)
+          })
+      },
       getData () {
         const childId = this.childId // 获取 childId 值
         const hasChild = this.hasChild
@@ -162,17 +183,6 @@
   }
 </script>
 <style lang="less" scoped>
-.custom-calendar {
-  width: 370px;
-  height: 10px!important;
-}
-.custom-calendar table {
-  width: 80%; /* 设置表格宽度为80% */
-  height: 10%;
-}
-.is-selected {
-  color: #1989FA;
-}
   .cardMessage {
     .ivu-icon {
       font-size: 38px;
