@@ -179,7 +179,7 @@ export default defineComponent({
         .then(response => {
           console.log(response.data.data)
           if (response.data.success) {
-            this.$Message.success('查询成功！')
+            // this.$Message.success('查询成功！')
             this.listData = response.data.data // 使用检索到的数据更新 listData
             // 查看收入的请求体
             axios
@@ -197,7 +197,7 @@ export default defineComponent({
                         this.listPayData = payResponse.data.data
                         console.log('这是支出请求成功,数据如下', this.listPayData)
                       } else {
-                        this.$Message.error('查询支出信息查询失败！')
+                        // this.$Message.error('查询支出信息查询失败！')
                         console.error('查询支出信息查询失败', response.data)
                       }
                     })

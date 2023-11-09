@@ -67,7 +67,7 @@ export default defineComponent({
     loadCommodities () {
       this.$axios.get('http://localhost:8080/children/subject/viewAllSubject').then(response => {
         if (response.data.code === '666') {
-          this.$Message.success('商品检索成功!')
+          // this.$Message.success('商品检索成功!')
           this.commodities = response.data.data
           console.log(typeof this.commodities)
           console.log(this.commodities)
