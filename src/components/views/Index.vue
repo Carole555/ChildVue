@@ -96,8 +96,10 @@
           { url: '/static/img/4.png', alt: 'Image 4' }
         ],
         num: null,
+        tasknum: null,
         childId: null, // 初始化 childId 为 null 或合适的初始值
         childScore: getUser().score,
+        shoppingNum: '',
         params: {
           page: 1,
           limit: 10
@@ -159,6 +161,40 @@
               Cookies.set('token', response.data.token)
               this.num = response.data.data
               console.log(this.num)
+            } else {
+              this.$Message.error('失败!')
+            }
+          })
+          .catch(error => {
+            this.loading = false
+            console.error('失败:', error)
+          })
+        axios.get(`http://localhost:8080/children/purchase/purchaseSubjectRecode/${childId}`, {})
+          .then(newresponse => {
+            this.loading = false
+            if (newresponse.data.success) {
+              this.$Message.success('成功!')
+              Cookies.set('token', newresponse.data.data)
+              this.shoppingNum = newresponse.data.data
+              console.log(this.shoppingNum)
+              console.log('后置商品查询成功')
+            } else {
+              this.$Message.error('失败!')
+            }
+          })
+          .catch(error => {
+            this.loading = false
+            console.error('失败:', error)
+          })
+        axios.get(`http://localhost:8080/children/task-child/viewRemainingTasks/${childId}`, {})
+          .then(nresponse => {
+            this.loading = false
+            if (nresponse.data.success) {
+              this.$Message.success('成功!')
+              Cookies.set('token', nresponse.data.data)
+              this.tasknum = nresponse.data.data
+              console.log(this.tasknum)
+              console.log('查询成功')
             } else {
               this.$Message.error('失败!')
             }
