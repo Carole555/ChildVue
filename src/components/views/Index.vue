@@ -40,7 +40,7 @@
       <Col :md='{span:8}'>
       <Card style="height: 320px">
         <p slot="title">
-          10个已经完成，2个待完成，1个正在进行中
+          {{num.pendingTasks}}个待批改，{{num.notPassedTasks}}个未通过，{{num.passedTasks}}个已通过
         </p>
         <a href="#" slot="extra" @click.prevent="refresh">
           <Icon type="ios-loop-strong"></Icon>
@@ -71,6 +71,9 @@
 </template>
 <script>
   import IEcharts from 'vue-echarts-v3/src/full.js'
+  import axios from 'axios'
+  import Cookies from 'js-cookie'
+  import {getUser} from '../../common/utils'
   export default {
     props: ['childId'],
     propsdata: ['hasChild'],
@@ -79,11 +82,13 @@
       const hasChild = this.$route.query.hasChild
       console.log('Child ID:', childId)
       console.log('haschild', hasChild)
+      this.getNum()
     },
     name: 'index',
     components: {IEcharts},
     data () {
       return {
+        num: null,
         childId: null, // 初始化 childId 为 null 或合适的初始值
         params: {
           page: 1,
@@ -123,7 +128,7 @@
           },
           yAxis: {},
           series: [{
-            name: 'Sales',
+            name: '详情',
             type: 'bar',
             data: [5, 2, 3, 4, 3, 3]
           }]
@@ -135,6 +140,26 @@
       /**
        * 刷新页面请求
        * */
+      getNum () {
+        const childId = getUser().id
+        console.log(childId)
+        axios.get(`http://localhost:8080/children/task-child/count/${childId}`, {})
+          .then(response => {
+            this.loading = false
+            if (response.data.success) {
+              this.$Message.success('成功!')
+              Cookies.set('token', response.data.token)
+              this.num = response.data.data
+              console.log(this.num)
+            } else {
+              this.$Message.error('失败!')
+            }
+          })
+          .catch(error => {
+            this.loading = false
+            console.error('失败:', error)
+          })
+      },
       getData () {
         const childId = this.childId // 获取 childId 值
         const hasChild = this.hasChild
