@@ -36,7 +36,7 @@
                   <Col :span="12">
                     <Card :body-style="{ padding: '20px', width: '200px', height: '200px', margin: '0 auto' }" class="horizontal-card">
                       <div class="horizontal-card-content">
-                        <img :src="`/static/img/${payData.subPhoto}`" class="image" />
+                        <img :src="payData.subPhoto" class="image" />
                         <div class="horizontal-card-details">
                           <div class="name">{{ payData.name }}</div>
                           <div class="points">{{ payData.value }}积分</div>
