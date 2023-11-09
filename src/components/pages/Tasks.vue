@@ -8,8 +8,8 @@
     <h1>我的任务</h1>
     <div class="course-grid" @click="toTask">
       <div v-for="task in pagedCourses" :key="task.id" class="course-card" @click="navigateToCourse(task.id)">
-        <div class="course-label" :style="{ backgroundColor: task.required ? 'yellow' : 'green', color: task.required ? 'red' : 'black' }">
-          {{ task.required ? '待批改' : '已完成' }}
+        <div class="course-label" :style="{ backgroundColor: task.isCorrected === 0 ? 'yellow' : task.isCorrected === 1 ? 'green': task.isCorrected === 2 ? 'red':'', color: task.isCorrected === 0 ? 'red' : task.isCorrected === 1 ? 'black':task.isCorrected === 2 ? 'white':'' }">
+          {{ task.isCorrected === 0 ? '待批改' : task.isCorrected === 1 ? '未通过' :task.isCorrected === 2 ? '已通过' : '' }}
         </div>
         <img :src="task.image" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ task.name }}</h2>
@@ -24,54 +24,18 @@
 </template>
 
 <script>
-export default {
+import {getUser} from '../../common/utils'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import {defineComponent} from 'vue/types/index'
+
+export default defineComponent({
+  mounted () {
+    this.showall()
+  },
   data () {
     return {
-      tasks: [
-        {
-          id: 1,
-          name: 'Mathematics',
-          image: '/static/img/fullstack.jpg',
-          description: 'Learn the fundamentals of mathematics and solve complex problems.',
-          required: true // Added required property
-        },
-        {
-          id: 2,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 6,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 3,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 4,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        },
-        {
-          id: 5,
-          name: 'Science',
-          image: '/static/img/fullstack.jpg',
-          description: 'Explore the fascinating world of science and conduct experiments.',
-          required: false // Added required property
-        }
-        // Add more courses here...
-      ],
+      tasks: [],
       created () {
         // 在组件创建时获取课程数据，可以使用课程的ID参数从后端或其他数据源获取课程详细信息
         this.fetchCourseData()
@@ -91,12 +55,37 @@ export default {
     }
   },
   methods: {
+    showall () {
+      console.log('调用了 showData 方法')
+      const hasChild = this.$route.query.hasChild
+      console.log('页面Child :', hasChild)
+      const grade = getUser().grade
+      console.log(grade)
+      // 确保 childId 的值有效
+      this.loading = true
+      axios.get(`http://localhost:8080/children/task/verifyGradeTask/${grade}`, {})
+        .then(response => {
+          this.loading = false
+          if (response.data.code === '666') {
+            this.$Message.success('成功!')
+            Cookies.set('token', response.data.token)
+            this.tasks = response.data.data
+            console.log(this.tasks)
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          console.error('失败:', error)
+        })
+    },
     toAllTask () {
       this.$router.push('/Course')
     },
     navigateToCourse (tasksId) {
       // Redirect to the course page for the selected course
-      this.$router.push(`/Tasks/${tasksId}`)
+      this.$router.push({name: 'myTask', query: {tasksId}})
     },
     previousPage () {
       if (this.currentPage > 1) {
@@ -131,7 +120,7 @@ export default {
       }, 500)
     }
   }
-}
+})
 </script>
 
 <style scoped>
