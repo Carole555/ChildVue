@@ -35,12 +35,11 @@
       </Card>
       </Col>
     </Row>
-
     <Row :gutter="8">
       <Col :md='{span:8}'>
       <Card style="height: 315px">
         <p slot="title">
-          {{num.pendingTasks}}个待批改，{{num.notPassedTasks}}个未通过，{{num.passedTasks}}个已通过
+          {{pendingTasks}}个待批改，{{notPassedTasks}}个未通过，{{passedTasks}}个已通过
         </p>
         <a href="#" slot="extra" @click.prevent="refresh">
           <Icon type="ios-loop-strong"></Icon>
@@ -78,6 +77,8 @@
   export default {
     props: ['childId'],
     propsdata: ['hasChild'],
+    shoppingNum: null,
+    tasknum: null,
     mounted () {
       const childId = this.$route.query.childId
       const hasChild = this.$route.query.hasChild
@@ -89,17 +90,17 @@
     components: {IEcharts},
     data () {
       return {
+        notPassedTasks: '',
+        passedTasks: '',
+        pendingTasks: '',
         imageList: [
           { url: '/static/img/1.png', alt: 'Image 1' },
           { url: '/static/img/2.png', alt: 'Image 2' },
           { url: '/static/img/3.png', alt: 'Image 3' },
           { url: '/static/img/4.png', alt: 'Image 4' }
         ],
-        num: null,
-        tasknum: null,
         childId: null, // 初始化 childId 为 null 或合适的初始值
         childScore: getUser().score,
-        shoppingNum: '',
         params: {
           page: 1,
           limit: 10
@@ -109,8 +110,8 @@
         cardMessage: [
           {
             icon: 'ios-cart',
-            name: '购置物品',
-            count: '344'
+            name: '兑换物品',
+            count: this.shoppingNum
           },
           {
             icon: 'ios-star',
@@ -125,7 +126,7 @@
           {
             icon: 'ios-book',
             name: '学习任务',
-            count: '12'
+            count: this.tasknum
           }
         ],
         bar: {
@@ -157,9 +158,11 @@
           .then(response => {
             this.loading = false
             if (response.data.success) {
-              this.$Message.success('成功!')
               Cookies.set('token', response.data.token)
               this.num = response.data.data
+              this.notPassedTasks = response.data.data.notPassedTasks
+              this.passedTasks = response.data.data.passedTasks
+              this.pendingTasks = response.data.data.pendingTasks
               console.log(this.num)
             } else {
               this.$Message.error('失败!')
@@ -173,11 +176,29 @@
           .then(newresponse => {
             this.loading = false
             if (newresponse.data.success) {
-              this.$Message.success('成功!')
+              Cookies.set('token', newresponse.data.data)
+              this.num = newresponse.data.data
+              this.notPassedTasks = newresponse.data.data.notPassedTasks
+              this.passedTasks = newresponse.data.data.passedTasks
+              this.pendingTasks = newresponse.data.data.pendingTasks
+              console.log(this.num)
+            } else {
+              this.$Message.error('失败!')
+            }
+          })
+          .catch(error => {
+            this.loading = false
+            console.error('失败:', error)
+          })
+        axios.get(`http://localhost:8080/children/purchase/purchaseSubjectRecode/${childId}`, {})
+          .then(newresponse => {
+            this.loading = false
+            if (newresponse.data.success) {
               Cookies.set('token', newresponse.data.data)
               this.shoppingNum = newresponse.data.data
-              console.log(this.shoppingNum)
-              console.log('后置商品查询成功')
+              console.log('shoppingNum为：', this.shoppingNum)
+              console.log('购置商品查询成功')
+              this.cardMessage[0].count = this.shoppingNum
             } else {
               this.$Message.error('失败!')
             }
@@ -190,11 +211,11 @@
           .then(nresponse => {
             this.loading = false
             if (nresponse.data.success) {
-              this.$Message.success('成功!')
               Cookies.set('token', nresponse.data.data)
               this.tasknum = nresponse.data.data
               console.log(this.tasknum)
               console.log('查询成功')
+              this.cardMessage[3].count = this.tasknum
             } else {
               this.$Message.error('失败!')
             }
