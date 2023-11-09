@@ -27,7 +27,7 @@
 import {getUser} from '../../common/utils'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import {defineComponent} from 'vue/types/index'
+import {defineComponent} from 'vue'
 
 export default defineComponent({
   mounted () {
