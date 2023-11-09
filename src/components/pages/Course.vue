@@ -15,7 +15,7 @@
           <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input" style="float: left; margin-left: 30px"></el-input>
         </el-col>
         <el-col>
-          <el-button @click="search" class="search-button" type="primary" icon="el-icon-search">搜索</el-button>
+          <el-button @click="search()" class="search-button" type="primary" icon="el-icon-search">搜索</el-button>
         </el-col>
       </el-row>
     </div>
@@ -53,6 +53,7 @@ export default defineComponent({
   data () {
     return {
       hasChild: null,
+      searchTerm: '',
       courses: [],
       currentPage: 1,
       coursesPerPage: 10,
@@ -81,21 +82,43 @@ export default defineComponent({
     }
   },
   methods: {
-    showall () {
-      console.log('调用了 showData 方法')
-      const hasChild = this.$route.query.hasChild
-      console.log('页面Child :', hasChild)
-      const grade = getUser().grade
-      console.log(grade)
-      // 确保 childId 的值有效
-      this.loading = true
-      axios.get(`http://localhost:8080/children/task/verifyGradeTask/${grade}`, {})
+    search () {
+      axios.get(`http://localhost:8080/children/task/searchTask`, {
+        params: {
+          subject: this.searchTerm
+        }
+      })
         .then(response => {
           this.loading = false
           if (response.data.code === '666') {
             this.$Message.success('成功!')
             Cookies.set('token', response.data.token)
             this.courses = response.data.data
+            console.log(this.courses)
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          console.error('失败:', error)
+        })
+    },
+    showall () {
+      console.log('调用了 showData 方法')
+      const hasChild = this.$route.query.hasChild
+      console.log('页面Child :', hasChild)
+      const childId = getUser().id
+      console.log(childId)
+      // 确保 childId 的值有效
+      this.loading = true
+      axios.get(`http://localhost:8080/children/task-child/viewRemainingTasks/${childId}`, {})
+        .then(response => {
+          this.loading = false
+          if (response.data.success) {
+            this.$Message.success('成功!')
+            Cookies.set('token', response.data.token)
+            this.courses = response.data.tasks
             console.log(this.courses)
           } else {
             this.$Message.error('失败!')
