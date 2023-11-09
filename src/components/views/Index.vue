@@ -46,7 +46,7 @@
           <Icon type="ios-loop-strong"></Icon>
         </a>
         <div class="block">
-          <el-carousel height="162px">
+          <el-carousel height="200px">
               <el-carousel-item v-for="(image, index) in imageList" :key="index">
                 <img :src="image.url" :alt="image.alt" class="carousel-image">
               </el-carousel-item>
@@ -217,7 +217,7 @@
     height: 280px;
   }
 .carousel-image {
-  width: 368px; /* 设置宽度为100% */
-  height: 162px; /* 自动计算高度，保持原始比例 */
+  width: 370px; /* 设置宽度为100% */
+  height: 200px; /* 自动计算高度，保持原始比例 */
 }
 </style>
