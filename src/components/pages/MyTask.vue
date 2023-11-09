@@ -26,9 +26,9 @@
         <h2>评价：</h2>
         <p>评价的详细描述内容...</p>
       </div>
-
-
-
+      <div class="button-container">
+      <el-button type="primary" v-if='task.isCorrected === 2' @click="toFilter(taskId)">重新提交<i class="el-icon-upload el-icon--right"></i></el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +40,9 @@ export default {
     }
   },
   methods: {
+    toFilter (taskId) {
+      this.$router.push({name: 'filter', query: {taskId}})
+    },
     toMyTask () {
       this.$router.push('/Tasks')
     },
@@ -118,7 +121,11 @@ export default {
 .submission-container {
   margin-top: 20px;
 }
-
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 .submission {
   display: flex;
   justify-content: space-between;
