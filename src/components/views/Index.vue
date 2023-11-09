@@ -45,12 +45,13 @@
         <a href="#" slot="extra" @click.prevent="refresh">
           <Icon type="ios-loop-strong"></Icon>
         </a>
-        <Steps :current="2" direction="vertical" size="small">
-          <Step title="已完成" content="这里是该步骤的描述信息"></Step>
-          <Step title="已完成" content="这里是该步骤的描述信息"></Step>
-          <Step title="进行中" content="这里是该步骤的描述信息"></Step>
-          <Step title="待进行" content="这里是该步骤的描述信息"></Step>
-        </Steps>
+<!--        <Steps :current="2" direction="vertical" size="small">-->
+<!--          <Step title="已完成" content="这里是该步骤的描述信息"></Step>-->
+<!--          <Step title="已完成" content="这里是该步骤的描述信息"></Step>-->
+<!--          <Step title="进行中" content="这里是该步骤的描述信息"></Step>-->
+<!--          <Step title="待进行" content="这里是该步骤的描述信息"></Step>-->
+<!--        </Steps>-->
+        <el-calendar v-model="value" class="custom-calendar"></el-calendar>
       </Card>
       </Col>
       <Col :md='{span:16}'>
@@ -71,6 +72,7 @@
 </template>
 <script>
   import IEcharts from 'vue-echarts-v3/src/full.js'
+  import {getUser} from '../../common/utils'
   export default {
     props: ['childId'],
     propsdata: ['hasChild'],
@@ -84,6 +86,8 @@
     components: {IEcharts},
     data () {
       return {
+        value: new Date(),
+        childScore: getUser().score,
         childId: null, // 初始化 childId 为 null 或合适的初始值
         params: {
           page: 1,
@@ -100,7 +104,7 @@
           {
             icon: 'ios-star',
             name: '拥有积分',
-            count: '2111'
+            count: getUser().score
           },
           {
             icon: 'ios-email',
@@ -158,6 +162,17 @@
   }
 </script>
 <style lang="less" scoped>
+.custom-calendar {
+  width: 370px;
+  height: 10px!important;
+}
+.custom-calendar table {
+  width: 80%; /* 设置表格宽度为80% */
+  height: 10%;
+}
+.is-selected {
+  color: #1989FA;
+}
   .cardMessage {
     .ivu-icon {
       font-size: 38px;

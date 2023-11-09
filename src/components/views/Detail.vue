@@ -6,9 +6,11 @@
           <p slot="title">
             积分明细
           </p>
+          <h1>当前积分：{{childScore}}</h1>
           <a href="#" slot="extra" @click.prevent="refresh">
             <Icon type="ios-loop-strong"></Icon>
           </a>
+
           <el-tabs v-model="activeName" class="demo-tabs" @tab-click="getALLData">
             <el-tab-pane label="全部" name="first">
               <Table
@@ -71,6 +73,7 @@ export default defineComponent({
   data () {
     return {
       childId: null, // 用于保存从登陆页面传的childId的属性
+      childScore: getUser().score,
       cardList: [
         {
           image: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
