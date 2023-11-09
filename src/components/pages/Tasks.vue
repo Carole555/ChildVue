@@ -7,13 +7,13 @@
     </div>
     <h1>我的任务</h1>
     <div class="course-grid" @click="toTask">
-      <div v-for="task in pagedCourses" :key="task.id" class="course-card" @click="navigateToCourse(task.id)">
+      <div v-for="task in pagedCourses" :key="task.taskId" class="course-card" @click="navigateToCourse(task.taskId)">
         <div class="course-label" :style="{ backgroundColor: task.isCorrected === 0 ? 'yellow' : task.isCorrected === 1 ? 'green': task.isCorrected === 2 ? 'red':'', color: task.isCorrected === 0 ? 'red' : task.isCorrected === 1 ? 'black':task.isCorrected === 2 ? 'white':'' }">
           {{ task.isCorrected === 0 ? '待批改' : task.isCorrected === 1 ? '未通过' :task.isCorrected === 2 ? '已通过' : '' }}
         </div>
-        <img :src="task.image" alt="Course Image" class="course-image" />
+        <img :src="task.taskPhoto" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ task.name }}</h2>
-        <p class="course-description">{{ task.description }}</p>
+        <p class="course-description">{{ task.content }}</p>
       </div>
     </div>
     <div class="pagination">

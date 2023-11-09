@@ -41,7 +41,8 @@ export default {
   },
   methods: {
     toFilter (taskId) {
-      this.$router.push({name: 'filter', query: {taskId}})
+      const courseId = taskId
+      this.$router.push({name: 'filter', query: {courseId}})
     },
     toMyTask () {
       this.$router.push('/Tasks')
