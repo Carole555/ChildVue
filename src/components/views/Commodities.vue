@@ -12,7 +12,7 @@
         <el-card style="width: calc(100% / 6 - 20px);margin-bottom: 20px;height: 225px;float: left;margin-right: 15px" class="commodity"
                  bodyStyle="padding:10px" shadow="hover">
           <div class="picture" @click="exchange(item)">
-            <img :src="getImgUrl(item.subPhoto)" alt="图片" style="width: 160px; height: 160px;">
+            <img :src="item.subPhoto" alt="图片" style="width: 160px; height: 160px;">
           </div>
           <div class="info">
             <div class="name">
@@ -88,10 +88,10 @@ export default defineComponent({
         value: item.value,
         content: item.content
       }
-    },
-    getImgUrl (subPhoto) {
-      return `../static/img/${subPhoto}`
     }
+    // getImgUrl (subPhoto) {
+    //   return `../static/img/${subPhoto}`
+    // }
   }
 })
 

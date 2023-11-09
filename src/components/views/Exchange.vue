@@ -4,7 +4,7 @@
       <div class="popup-content">
         <div class="content-container">
         <div class="image-container">
-          <img :src="getImgUrl(form.subPhoto)" alt="Image" class="image">
+          <img :src="form.subPhoto" alt="Image" class="image">
         </div>
         <div class="text-container">
           <h3 class="image-name">{{ form.name }}</h3>
@@ -130,10 +130,10 @@ export default defineComponent({
       // 取消的事件处理逻辑
       // 可以在这里执行关闭弹窗的操作
       this.dialogFormVisible = false
-    },
-    getImgUrl (subPhoto) {
-      return `../static/img/${subPhoto}`
     }
+    // getImgUrl (subPhoto) {
+    //   return `../static/img/${subPhoto}`
+    // }
     // 其他方法
   }
 })
