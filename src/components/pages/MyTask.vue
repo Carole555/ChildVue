@@ -27,7 +27,7 @@
         <p>{{ task.comment }}</p>
       </div>
       <div class="button-container">
-      <el-button type="primary" v-if='task.isCorrected === 2' @click="toFilter">重新提交<i class="el-icon-upload el-icon--right"></i></el-button>
+      <el-button type="primary" v-if='task.isCorrected === 1' @click="toFilter">重新提交<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@ export default defineComponent({
             this.task.homeworkPhoto = response.data.data[0].homeworkPhoto
             this.task.comment = response.data.data[0].comment
             console.log('响应', response.data.data[0].name)
-            console.log(' this.task', this.task.homeworkPhoto)
+            console.log(' this.task', this.task)
           } else {
             this.$Message.error('失败!')
           }
@@ -146,8 +146,8 @@ export default defineComponent({
 }
 .button-container {
   display: flex;
-  justify-content: center;
   margin-top: 20px;
+  justify-content: flex-start;
 }
 .submission {
   display: flex;

@@ -21,8 +21,8 @@
     </div>
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
-        <div class="course-label" :style="{ backgroundColor: course.isMustDo ? 'green' : 'yellow', color: course.isMustDo ? 'white' : 'black' }">
-          {{ course.isMustDo ? '必做' : '选做' }}
+        <div class="course-label" :style="{ backgroundColor: course.grade === this.grade && task.isMustDo === 1 ? 'green' : 'yellow', color: course.grade === this.grade && task.isMustDo === 1 ? 'white' : 'black' }">
+          {{ course.grade === this.grade && task.isMustDo === 1 ? '必做' : '选做' }}
         </div>
         <img :src="course.taskPhoto" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ course.name }}</h2>
@@ -55,6 +55,7 @@ export default defineComponent({
   },
   data () {
     return {
+      grade: getUser().grade,
       hasChild: null,
       searchTerm: '',
       courses: [],

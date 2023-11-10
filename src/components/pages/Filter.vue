@@ -45,6 +45,8 @@ export default defineComponent({
   data () {
     return {
       id: null,
+      file: null,
+      reader: null,
       courses: null,
       fileList: []
     }
@@ -82,32 +84,26 @@ export default defineComponent({
     },
 
     handleFileUpload (event) {
+      this.file = event.target.files[0]
       const files = event.target.files
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
         const url = URL.createObjectURL(file)
-        this.fileList.push({ name: file.name, size: file.size, url })
+        this.fileList.push({ name: file.name, size: file.size, url: url })
       }
     },
     submit () {
       // 处理提交逻辑
       // 可以在这里执行跳转到新界面的操作
-      const file = new FormData()
-      this.fileList.forEach((filel) => {
-        // 将文件内容添加到FormData中
-        file.append('file', filel.raw)
-      })
       const childId = getUser().id
       const taskId = this.$route.query.courseId
+      const formData = new FormData()
+      formData.append('childId', childId)
+      formData.append('taskId', taskId)
+      formData.append('file', this.file)
       // 发送FormData到后端
       // 使用axios或其他HTTP库发送POST请求
-      axios.post(`http://localhost:8080/children/file/uploadTaskChildPhoto`, null, {
-        params: {
-          childId,
-          taskId,
-          file
-        }
-      })
+      axios.post(`http://localhost:8080/children/file/uploadTaskChildPhoto`, formData)
         .then((response) => {
           // 请求成功处理逻辑
           console.log(response.data)
