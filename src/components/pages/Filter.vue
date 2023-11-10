@@ -107,6 +107,7 @@ export default defineComponent({
         .then((response) => {
           // 请求成功处理逻辑
           console.log(response.data)
+          this.$router.push('/Course')
         })
         .catch((error) => {
           // 请求失败处理逻辑
