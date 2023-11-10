@@ -7,13 +7,16 @@
     </div>
     <h1>我的任务</h1>
     <div class="course-grid" @click="toTask">
-      <div v-for="task in pagedCourses" :key="task.taskId" class="course-card" @click="navigateToCourse(task.taskId)">
-        <div class="course-label" :style="{ backgroundColor: task.isCorrected === 0 ? 'yellow' : task.isCorrected === 1 ? 'green': task.isCorrected === 2 ? 'red':'', color: task.isCorrected === 0 ? 'red' : task.isCorrected === 1 ? 'black':task.isCorrected === 2 ? 'white':'' }">
-          {{ task.isCorrected === 0 ? '待批改' : task.isCorrected === 1 ? '未通过' :task.isCorrected === 2 ? '已通过' : '' }}
+      <div v-for="task in pagedCourses" :key="task.id" class="course-card" @click="navigateToCourse(task.id)">
+        <div class="course-label" :style="{ backgroundColor: task.is_corrected === 0 ? 'yellow' : task.is_corrected === 1 ? 'green': task.is_corrected === 2 ? 'red':'', color: task.is_corrected === 0 ? 'red' : task.is_corrected === 1 ? 'black':task.is_corrected === 2 ? 'white':'' }">
+          {{ task.is_corrected === 0 ? '待批改' : task.is_corrected === 1 ? '未通过' :task.is_corrected === 2 ? '已通过' : '' }}
         </div>
         <img :src="task.taskPhoto" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ task.name }}</h2>
         <p class="course-description">{{ task.content }}</p>
+        <div class="completed-count">
+          <i class="fas fa-user" style="color: lightgray;"></i> 已完成人数为：{{task.completedNum}}
+        </div>
       </div>
     </div>
     <div class="pagination">
@@ -59,14 +62,14 @@ export default defineComponent({
       console.log('调用了 showData 方法')
       const hasChild = this.$route.query.hasChild
       console.log('页面Child :', hasChild)
-      const grade = getUser().grade
-      console.log(grade)
+      const childId = getUser().id
+      console.log(childId)
       // 确保 childId 的值有效
       this.loading = true
-      axios.get(`http://localhost:8080/children/task/verifyGradeTask/${grade}`, {})
+      axios.get(`http://localhost:8080/children/task-child/viewMyTasks/${childId}`, {})
         .then(response => {
           this.loading = false
-          if (response.data.code === '666') {
+          if (response.data.success) {
             this.$Message.success('成功!')
             Cookies.set('token', response.data.token)
             this.tasks = response.data.data
@@ -85,6 +88,7 @@ export default defineComponent({
     },
     navigateToCourse (tasksId) {
       // Redirect to the course page for the selected course
+      console.log(tasksId)
       this.$router.push({name: 'myTask', query: {tasksId}})
     },
     previousPage () {
@@ -171,7 +175,14 @@ export default defineComponent({
   border-radius: 5px;
   font-size: 17px;
 }
-
+.completed-count {
+  text-align: left;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 将 justify-content 设置为 flex-start */
+  gap: 5px;
+}
 .course-label {
   padding: 5px 10px;
   border-radius: 5px;

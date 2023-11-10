@@ -27,6 +27,9 @@
         <img :src="course.taskPhoto" alt="Course Image" class="course-image" />
         <h2 class="course-title">{{ course.name }}</h2>
         <p class="course-description">{{ course.content }}</p>
+        <div class="completed-count">
+          <i class="fas fa-user" style="color: lightgray;"></i> 已完成人数为：{{course.completedNum}}
+        </div>
       </div>
     </div>
     <div class="pagination">
@@ -212,7 +215,14 @@ export default defineComponent({
   border-radius: 5px;
   font-weight: bold;
 }
-
+.completed-count {
+  text-align: left;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 将 justify-content 设置为 flex-start */
+  gap: 5px;
+}
 .required {
   background-color: green;
   color: white;
