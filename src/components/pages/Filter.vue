@@ -58,7 +58,7 @@ export default defineComponent({
         .then(response => {
           this.loading = false
           if (response.data.code === '666') {
-            this.$Message.success('成功!')
+            // this.$Message.success('成功!')
             Cookies.set('token', response.data.token)
             this.courses = response.data.data
             console.log(this.courses)
