@@ -18,6 +18,20 @@
           <el-button @click="search()" class="search-button" type="primary" icon="el-icon-search">搜索</el-button>
         </el-col>
       </el-row>
+      <el-dropdown style="float: left; margin-top: 10px">
+      <span class="el-dropdown-link">
+        任务分类<i class="el-icon-arrow-down el-icon--right"></i>
+      </span>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="filterTasks('全部任务')">全部任务</el-dropdown-item>
+          <el-dropdown-item @click="filterTasks('A')">一年级任务</el-dropdown-item>
+          <el-dropdown-item @click="filterTasks('二年级任务')">二年级任务</el-dropdown-item>
+          <el-dropdown-item @click="filterTasks('三年级任务')">三年级任务</el-dropdown-item>
+          <el-dropdown-item @click="filterTasks('四年级任务')">四年级任务</el-dropdown-item>
+          <el-dropdown-item @click="filterTasks('五年级任务')">五年级任务</el-dropdown-item>
+          <el-dropdown-item @click="filterTasks('六年级任务')">六年级任务</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
@@ -57,7 +71,8 @@ export default defineComponent({
       courses: [],
       currentPage: 1,
       coursesPerPage: 10,
-      loading: false
+      loading: false,
+      currentCategory: '全部任务'
     }
   },
   watch: {
@@ -146,6 +161,35 @@ export default defineComponent({
     },
     toMyTask () {
       this.$router.push('/Tasks')
+    },
+    filterTasks (category) {
+      console.log('进去了')
+      this.currentCategory = category
+      // Perform filtering based on the selected category
+      if (this.currentCategory === '全部任务') {
+        this.showall()
+      } else {
+        console.log('进去了')
+        this.loading = true
+        axios.post(`http://localhost:8080/children/task/viewCertainGradeTask`, null, {
+          params: {
+            grade: this.currentCategory
+          }
+        }).then(response => {
+          this.loading = false
+          if (response.data.code === '666') {
+            Cookies.set('token', response.data.token)
+            this.courses = response.data
+            console.log(this.courses)
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+          .catch(error => {
+            this.loading = false
+            console.error('失败:', error)
+          })
+      }
     }
   }
 })
