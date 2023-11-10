@@ -15,7 +15,7 @@
     <!--是否全屏  /-->
     <!-- 消息类按钮 -->
     <div class="msg-group-box">
-      <slot name='msg-icon'></slot>
+<!--      <slot name='msg-icon'></slot>-->
       <slot name='right'></slot>
     </div>
 

@@ -72,6 +72,7 @@ export default defineComponent({
   },
   data () {
     return {
+      activeName: 'first',
       childId: null, // 用于保存从登陆页面传的childId的属性
       childScore: getUser().score,
       cardList: [

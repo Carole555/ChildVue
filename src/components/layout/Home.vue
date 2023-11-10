@@ -55,13 +55,11 @@
         <!-- 用户信息 -->
         <Dropdown class="userBox" slot='right'>
           <a href="javascript:void(0)">
-            Artiely
+            {{getUser().name}}
             <Icon type="arrow-down-b"></Icon>
           </a>
           <Dropdown-menu slot="list">
-            <Dropdown-item @click.native="modalUser=true">个人信息</Dropdown-item>
             <Dropdown-item @click.native="logout">退出登录</Dropdown-item>
-            <Dropdown-item @click.native="lock">锁定屏幕</Dropdown-item>
           </Dropdown-menu>
         </Dropdown>
         <!-- 用户信息 /-->
@@ -137,7 +135,9 @@
   import Container from '@/components/layout/container/Container'
   import menu from '@/router/menu'
   import Cookies from 'js-cookie'
-  export default {
+  import {getUser} from '../../common/utils'
+
+export default {
     props: ['childId'],
     prop: ['hasChild'],
     mounted () {
@@ -201,6 +201,7 @@
       }
     },
     methods: {
+      getUser,
       // 传给detial页面childId
       goToDetailPage () {
         this.$router.push({ path: '/detail', query: { childId: this.storedChildId } })
