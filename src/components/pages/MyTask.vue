@@ -19,7 +19,7 @@
         <h2>提交详情</h2>
         <div class="img-container">
           <!-- 提交图片 -->
-          <img src="task.homeworkPhoto" width="500" height="320" style="float: left;margin-left: -376px" controls>
+          <img :src="task.homeworkPhoto" alt="Image" class="image">
         </div>
       </div>
       <div class="requirements" v-if='task.isCorrected === 2 ||task.isCorrected === 1'>
@@ -35,7 +35,7 @@
 <script>
 import {defineComponent} from 'vue'
 import axios from 'axios'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import {getUser} from '../../common/utils'
 export default defineComponent({
   mounted () {
@@ -43,7 +43,14 @@ export default defineComponent({
   },
   data () {
     return {
-      task: { }
+      task: {
+        isCorrected: '',
+        name: '',
+        taskPhoto: '',
+        content: '',
+        homeworkPhoto: '',
+        comment: ''
+      }
     }
   },
   methods: {
@@ -61,10 +68,16 @@ export default defineComponent({
         .then(response => {
           this.loading = false
           if (response.data.success) {
-            this.$Message.success('成功!')
-            Cookies.set('token', response.data.token)
-            this.task = response.data.data
-            console.log(this.task)
+            // this.$Message.success('成功!')
+            // Cookies.set('token', response.data.token)
+            this.task.isCorrected = response.data.data[0].isCorrected
+            this.task.name = response.data.data[0].name
+            this.task.taskPhoto = response.data.data[0].taskPhoto
+            this.task.content = response.data.data[0].content
+            this.task.homeworkPhoto = response.data.data[0].homeworkPhoto
+            this.task.comment = response.data.data[0].comment
+            console.log('响应', response.data.data[0].name)
+            console.log(' this.task', this.task.homeworkPhoto)
           } else {
             this.$Message.error('失败!')
           }
@@ -123,6 +136,11 @@ export default defineComponent({
   margin-top: 20px;
 }
 
+.image {
+  width:500px;
+  height: 320px;
+  style:"float: left;margin-left: -376px";
+}
 .submission-container {
   margin-top: 20px;
 }
