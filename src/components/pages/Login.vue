@@ -51,7 +51,7 @@
             {required: true, message: '姓名不能为空', trigger: 'blur'}
           ],
           password: [
-            {required: true, message: '密码错误', trigger: 'blur'}
+            {required: true, message: '密码不能为空', trigger: 'blur'}
           ]
 
         }
@@ -90,7 +90,7 @@
                   this.$Message.error('登录失败!')
                   console.error('登录失败:', response.data)
                   this.$Notice.warning({
-                    title: '登录提示123',
+                    title: '登录提示',
                     desc: '用户名/密码错误...'
                   })
                 }
@@ -105,7 +105,7 @@
             this.$Message.error('表单验证失败!')
             this.$Notice.warning({
               title: '登录提示',
-              desc: '用户名/密码随意输入...'
+              desc: '用户名/密码为空...'
             })
           }
         })

@@ -7,7 +7,8 @@
         <Card>
           <Row>
             <Col span="8">
-            <Icon :type="item.icon"></Icon>
+<!--            <Icon :type="item.icon"></Icon>-->
+              <img :src="item.icon" class="image" />
             </Col>
             <Col span="16">
             <p class="subText">{{item.name}}</p>
@@ -79,6 +80,7 @@
     propsdata: ['hasChild'],
     shoppingNum: null,
     tasknum: null,
+    callNum: null,
     mounted () {
       const childId = this.$route.query.childId
       const hasChild = this.$route.query.hasChild
@@ -109,22 +111,22 @@
         valueCustomText: '王小明',
         cardMessage: [
           {
-            icon: 'ios-cart',
+            icon: '/static/img/shoppingBag.png',
             name: '兑换物品',
             count: this.shoppingNum
           },
           {
-            icon: 'ios-star',
+            icon: '/static/img/star.png',
             name: '拥有积分',
             count: getUser().score
           },
           {
-            icon: 'ios-email',
-            name: '未读邮件',
-            count: '23'
+            icon: '/static/img/phone.png',
+            name: '视频通话',
+            count: this.callNum
           },
           {
-            icon: 'ios-book',
+            icon: '/static/img/task.png',
             name: '学习任务',
             count: this.tasknum
           }
@@ -224,6 +226,23 @@
             this.loading = false
             console.error('失败:', error)
           })
+        axios.get(`http://localhost:8080/children/video/getVideoCallNum/${childId}`, {})
+          .then(presponse => {
+            this.loading = false
+            if (presponse.data.success) {
+              Cookies.set('token', presponse.data.data)
+              this.callNum = presponse.data.data
+              console.log(this.callNum)
+              console.log('视频通话查询成功')
+              this.cardMessage[2].count = this.callNum
+            } else {
+              this.$Message.error('视频通话次数查询失败!')
+            }
+          })
+          .catch(error => {
+            this.loading = false
+            console.error('视频通话次数查询失败:', error)
+          })
       },
       getData () {
         const childId = this.childId // 获取 childId 值
@@ -274,7 +293,11 @@
     height: 280px;
   }
 .carousel-image {
-  width: 370px; /* 设置宽度为100% */
+  width: 491px; /* 设置宽度为100% */
   height: 200px; /* 自动计算高度，保持原始比例 */
+}
+.image {
+  max-width: 35px; /* 调整图片大小 */
+  max-height: 35px; /* 调整图片大小 */
 }
 </style>

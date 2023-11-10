@@ -34,15 +34,6 @@ const menu = [
     fixed: false,
     level: 1,
     sort: 1
-  },
-  {
-    level: 1,
-    path: '/filter',
-    name: 'filter',
-    children: [],
-    fixed: false,
-    icon: 'icon-emoji_fill',
-    sort: 1
   }
 ]
 export default menu
