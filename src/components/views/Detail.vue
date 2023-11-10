@@ -10,29 +10,44 @@
           <a href="#" slot="extra" @click.prevent="refresh">
             <Icon type="ios-loop-strong"></Icon>
           </a>
-
           <el-tabs v-model="activeName" class="demo-tabs" @tab-click="getALLData">
             <el-tab-pane label="全部" name="first">
               <Table
                 :show-header="showHeader"
                 :height="fixedHeader ? 300 : ''"
                 :size="tableSize"
-                :data="listData"
+                :data="paginatedData1"
                 :columns="columns1"
               ></Table>
+              <el-row>
+                <el-pagination
+                  @current-change="handleCurrentChange1"
+                  :current-page="currentPage1"
+                  :page-size="pageSize"
+                  :total="listData.length"
+                ></el-pagination>
+              </el-row>
             </el-tab-pane>
             <el-tab-pane label="收入" name="second">
               <Table
                 :show-header="showHeader"
                 :height="fixedHeader ? 300 : ''"
                 :size="tableSize"
-                :data="listAddData"
+                :data="paginatedData2"
                 :columns="columns2"
               ></Table>
+              <el-row>
+                <el-pagination
+                  @current-change="handleCurrentChange2"
+                  :current-page="currentPage2"
+                  :page-size="pageSize"
+                  :total="listAddData.length"
+                ></el-pagination>
+              </el-row>
             </el-tab-pane>
             <el-tab-pane label="支出" name="third"  v-if="listPayData">
               <Row>
-                <template v-for="(payData, index) in listPayData">
+                <template v-for="(payData, index) in paginatedData" >
                   <Col :span="12">
                     <Card :body-style="{ padding: '20px', width: '200px', height: '200px', margin: '0 auto' }" class="horizontal-card">
                       <div class="horizontal-card-content">
@@ -47,6 +62,12 @@
                   </Col>
                   <br v-if="(index + 1) % 2 === 0" /> <!-- 每两个卡片后添加换行 -->
                 </template>
+                <el-pagination
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage3"
+                  :page-size="pageSize"
+                  :total="listPayData.length">
+                </el-pagination>
               </Row>
             </el-tab-pane>
           </el-tabs>
@@ -72,6 +93,10 @@ export default defineComponent({
   },
   data () {
     return {
+      currentPage1: 1,
+      currentPage2: 1,
+      currentPage3: 1,
+      pageSize: 20,
       activeName: 'first',
       childId: null, // 用于保存从登陆页面传的childId的属性
       childScore: getUser().score,
@@ -143,6 +168,23 @@ export default defineComponent({
       ]
     }
   },
+  computed: {
+    paginatedData () {
+      const startIndex = (this.currentPage3 - 1) * this.pageSize
+      const endIndex = startIndex + this.pageSize
+      return this.listPayData.slice(startIndex, endIndex)
+    },
+    paginatedData1 () {
+      const startIndex = (this.currentPage1 - 1) * this.pageSize
+      const endIndex = startIndex + this.pageSize
+      return this.listData.slice(startIndex, endIndex)
+    },
+    paginatedData2 () {
+      const startIndex = (this.currentPage2 - 1) * this.pageSize
+      const endIndex = startIndex + this.pageSize
+      return this.listAddData.slice(startIndex, endIndex)
+    }
+  },
   watch: {
     params: {
       handler (val) {
@@ -151,13 +193,17 @@ export default defineComponent({
       deep: true
     }
   },
-  computed: {},
   methods: {
-    pageChange (page) {
-      this.params.page = page
+    handleCurrentChange1 (currentPage1) {
+      // 当前页数发生变化时的回调
+      this.currentPage1 = currentPage1
     },
-    PageSizeChange (limit) {
-      this.params.limit = limit
+    handleCurrentChange2 (currentPage2) {
+      // 当前页数发生变化时的回调
+      this.currentPage2 = currentPage2
+    },
+    handleCurrentChange (page3) {
+      this.currentPage3 = page3
     },
     mounted () {
       // 从登录页面获取childId参数，并赋值给childId属性
