@@ -6,72 +6,89 @@
       </el-row>
     </div>
     <div class="content-container">
-      <h1 class="title">任务名称</h1>
+      <h1 class="title">{{task.name}}</h1>
       <div class="status">
         <h2>状态：</h2>
-        <img src="../../../static/img/wait.png" width=30px height=30px >
-        <p>待批改</p></div>
+        <img src="/static/img/wait.png" width=30px height=30px >
+        <p>{{ task.isCorrected === 0 ? '待批改' : task.isCorrected === 1 ? '未通过' :task.isCorrected === 2 ? '已通过' : '' }}</p></div>
       <div class="requirements">
         <h2>任务详情：</h2>
-        <p>任务的详细描述内容...</p>
+        <p>{{task.content}}</p>
       </div>
       <div class="submission-container">
         <h2>提交详情</h2>
         <div class="img-container">
           <!-- 提交图片 -->
-          <img src="../../../static/img/fullstack.jpg" width="500" height="320" style="float: left;margin-left: -376px" controls>
+          <img :src="task.homeworkPhoto" alt="Image" class="image">
         </div>
       </div>
-      <div class="requirements">
+      <div class="requirements" v-if='task.isCorrected === 2 ||task.isCorrected === 1'>
         <h2>评价：</h2>
-        <p>评价的详细描述内容...</p>
+        <p>{{ task.comment }}</p>
       </div>
       <div class="button-container">
-      <el-button type="primary" v-if='task.isCorrected === 2' @click="toFilter(taskId)">重新提交<i class="el-icon-upload el-icon--right"></i></el-button>
+      <el-button type="primary" v-if='task.isCorrected === 1' @click="toFilter">重新提交<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
     </div>
   </div>
 </template>
 <script>
-export default {
+import {defineComponent} from 'vue'
+import axios from 'axios'
+// import Cookies from 'js-cookie'
+import {getUser} from '../../common/utils'
+export default defineComponent({
+  mounted () {
+    this.showall()
+  },
   data () {
     return {
-      file: null
+      task: {
+        isCorrected: '',
+        name: '',
+        taskPhoto: '',
+        content: '',
+        homeworkPhoto: '',
+        comment: ''
+      }
     }
   },
   methods: {
-    toFilter (taskId) {
-      const courseId = taskId
+    toFilter () {
+      const courseId = this.$route.query.tasksId
       this.$router.push({name: 'filter', query: {courseId}})
     },
     toMyTask () {
       this.$router.push('/Tasks')
     },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
-
-    handleFileUpload (event) {
-      this.file = event.target.files[0]
-      console.log(event.target.files)
-    },
-    submit () {
-      // 处理提交逻辑
-      // 可以在这里执行跳转到新界面的操作
-      if (this.file) {
-        // 文件已上传
-        console.log('File uploaded:', this.file)
-      } else {
-        // 没有文件被上传
-        console.log('No file uploaded.')
-      }
+    showall () {
+      const childId = getUser().id
+      const taskId = this.$route.query.tasksId
+      axios.get(`http://localhost:8080/children/criticism/criticismDetails/${childId}/${taskId}`)
+        .then(response => {
+          this.loading = false
+          if (response.data.success) {
+            // this.$Message.success('成功!')
+            // Cookies.set('token', response.data.token)
+            this.task.isCorrected = response.data.data[0].isCorrected
+            this.task.name = response.data.data[0].name
+            this.task.taskPhoto = response.data.data[0].taskPhoto
+            this.task.content = response.data.data[0].content
+            this.task.homeworkPhoto = response.data.data[0].homeworkPhoto
+            this.task.comment = response.data.data[0].comment
+            console.log('响应', response.data.data[0].name)
+            console.log(' this.task', this.task)
+          } else {
+            this.$Message.error('失败!')
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          console.error('失败:', error)
+        })
     }
-
   }
-}
+})
 </script>
 <style>
 .upload-container {
@@ -119,13 +136,18 @@ export default {
   margin-top: 20px;
 }
 
+.image {
+  width:500px;
+  height: 320px;
+  style:"float: left;margin-left: -376px";
+}
 .submission-container {
   margin-top: 20px;
 }
 .button-container {
   display: flex;
-  justify-content: center;
   margin-top: 20px;
+  justify-content: flex-start;
 }
 .submission {
   display: flex;

@@ -14,29 +14,28 @@
         <h2>提交部分</h2>
         <div class="submission">
           <div class="upload-container">
-            <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :file-list="fileList"
-              list-type="picture">
-              <el-button size="small" type="primary" @change="handleFileUpload">点击上传</el-button>
+            <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" accept="image/jpeg, image/png">
+              <el-button size="small" type="primary" @click="openFileInput">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </el-upload>
           </div>
           <el-row>
             <el-button  @click="submit" type="primary" plain>确认提交</el-button>
           </el-row>
         </div>
       </div>
+      <div v-for="file in fileList" :key="file.uid">
+        <img :src="file.url" style="max-width: 200px; max-height: 200px;" />
+        <div>文件名: {{ file.name }}</div>
+        <div>文件大小: {{ formatFileSize(file.size) }}</div>
+      </div>
     </div>
-  </div>
+    </div>
 </template>
 <script>
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import {defineComponent} from 'vue'
+import {getUser} from '../../common/utils'
 export default defineComponent({
   mounted () {
     const id = this.$route.query.courseId
@@ -46,11 +45,17 @@ export default defineComponent({
   data () {
     return {
       id: null,
+      file: null,
+      reader: null,
       courses: null,
-      file: null
+      fileList: []
     }
   },
   methods: {
+    openFileInput () {
+      // 打开文件选择对话框
+      this.$refs.fileInput.click()
+    },
     showall () {
       const id = this.$route.query.courseId
       console.log('idid :', id)
@@ -80,17 +85,43 @@ export default defineComponent({
 
     handleFileUpload (event) {
       this.file = event.target.files[0]
-      console.log(event.target.files)
+      const files = event.target.files
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const url = URL.createObjectURL(file)
+        this.fileList.push({ name: file.name, size: file.size, url: url })
+      }
     },
     submit () {
       // 处理提交逻辑
       // 可以在这里执行跳转到新界面的操作
-      if (this.file) {
-        // 文件已上传
-        console.log('File uploaded:', this.file)
+      const childId = getUser().id
+      const taskId = this.$route.query.courseId
+      const formData = new FormData()
+      formData.append('childId', childId)
+      formData.append('taskId', taskId)
+      formData.append('file', this.file)
+      // 发送FormData到后端
+      // 使用axios或其他HTTP库发送POST请求
+      axios.post(`http://localhost:8080/children/file/uploadTaskChildPhoto`, formData)
+        .then((response) => {
+          // 请求成功处理逻辑
+          console.log(response.data)
+          this.$router.push('/Course')
+        })
+        .catch((error) => {
+          // 请求失败处理逻辑
+          console.error(error)
+        })
+    },
+    formatFileSize (size) {
+      // 格式化文件大小
+      if (size < 1024) {
+        return size + 'B'
+      } else if (size < 1024 * 1024) {
+        return (size / 1024).toFixed(2) + 'KB'
       } else {
-        // 没有文件被上传
-        console.log('No file uploaded.')
+        return (size / (1024 * 1024)).toFixed(2) + 'MB'
       }
     }
 
