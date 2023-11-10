@@ -253,7 +253,7 @@ export default defineComponent({
 .image {
   width: 100%;
   display: block;
-  max-width: 495px; /* 调整图片大小 */
+  max-width: 150px; /* 调整图片大小 */
   max-height: 150px; /* 调整图片大小 */
 }
 

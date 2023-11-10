@@ -293,7 +293,7 @@
     height: 280px;
   }
 .carousel-image {
-  width: 370px; /* 设置宽度为100% */
+  width: 491px; /* 设置宽度为100% */
   height: 200px; /* 自动计算高度，保持原始比例 */
 }
 .image {
