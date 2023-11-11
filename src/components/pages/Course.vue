@@ -12,27 +12,25 @@
       <el-row type="flex" justify="center" align="middle">
 
         <el-col>
-          <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input" style="float: left; margin-left: 30px"></el-input>
+          <el-input v-model="searchTerm" placeholder="输入搜索内容" class="search-input" style="float: left; margin-left: 40px"></el-input>
         </el-col>
         <el-col>
-          <el-button @click="search()" class="search-button" type="primary" icon="el-icon-search">搜索</el-button>
+          <el-button @click="search()" class="search-button" type="primary" icon="el-icon-search" style="float: left; margin-left: 70px">搜索</el-button>
         </el-col>
       </el-row>
-      <el-dropdown style="float: left; margin-top: 10px">
-      <span class="el-dropdown-link">
-        任务分类<i class="el-icon-arrow-down el-icon--right"></i>
-      </span>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="filterTasks('全部任务')">全部任务</el-dropdown-item>
-          <el-dropdown-item @click="filterTasks('A')">一年级任务</el-dropdown-item>
-          <el-dropdown-item @click="filterTasks('二年级任务')">二年级任务</el-dropdown-item>
-          <el-dropdown-item @click="filterTasks('三年级任务')">三年级任务</el-dropdown-item>
-          <el-dropdown-item @click="filterTasks('四年级任务')">四年级任务</el-dropdown-item>
-          <el-dropdown-item @click="filterTasks('五年级任务')">五年级任务</el-dropdown-item>
-          <el-dropdown-item @click="filterTasks('六年级任务')">六年级任务</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-select v-model="value" placeholder="请选择" style="float: left; margin-left: 100px">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-col>
+        <el-button type="primary" @click="filterTasks" style="float: left; margin-left: 30px">筛选</el-button>
+      </el-col>
     </div>
+
     <div class="course-grid">
       <div v-for="course in pagedCourses" :key="course.id" class="course-card" @click="navigateToCourse(course.id)">
         <div class="course-label" :style="{ backgroundColor: course.grade === this.grade && task.isMustDo === 1 ? 'green' : 'yellow', color: course.grade === this.grade && task.isMustDo === 1 ? 'white' : 'black' }">
@@ -69,10 +67,35 @@ export default defineComponent({
   },
   data () {
     return {
+      options: [{
+        value: '全部任务',
+        label: '全部任务'
+      }, {
+        value: 'A',
+        label: '一年级任务'
+      }, {
+        value: 'B',
+        label: '二年级任务'
+      }, {
+        value: 'C',
+        label: '三年级任务'
+      }, {
+        value: 'D',
+        label: '四年级任务'
+      }, {
+        value: 'E',
+        label: '五年级任务'
+      }, {
+        value: 'F',
+        label: '六年级任务'
+      }],
+      value: '',
+      dropdownVisible: true,
       grade: getUser().grade,
       hasChild: null,
       searchTerm: '',
       courses: [],
+      selectedCategory: '',
       currentPage: 1,
       coursesPerPage: 10,
       loading: false,
@@ -113,7 +136,7 @@ export default defineComponent({
             // this.$Message.success('成功!')
             Cookies.set('token', response.data.token)
             this.courses = response.data.data
-            console.log(this.courses)
+            console.log('搜索结果', this.courses)
           } else {
             this.$Message.error('失败!')
           }
@@ -138,9 +161,9 @@ export default defineComponent({
             // this.$Message.success('成功!')
             Cookies.set('token', response.data.token)
             this.courses = response.data.tasks
-            console.log(this.courses)
+            console.log('全部任务1111!', this.courses)
           } else {
-            this.$Message.error('失败!')
+            this.$Message.error('目前无任务查询失败!')
           }
         })
         .catch(error => {
@@ -166,24 +189,26 @@ export default defineComponent({
     toMyTask () {
       this.$router.push('/Tasks')
     },
-    filterTasks (category) {
+    selectCategory (category) {
+      this.selectedCategory = category
+    },
+    filterTasks () {
       console.log('进去了')
-      this.currentCategory = category
       // Perform filtering based on the selected category
-      if (this.currentCategory === '全部任务') {
+      if (this.value === '全部任务') {
         this.showall()
       } else {
-        console.log('进去了')
+        console.log(this.value)
         this.loading = true
-        axios.post(`http://localhost:8080/children/task/viewCertainGradeTask`, null, {
+        axios.post(`http://localhost:8080/children/task/ViewCertainGradeTask`, null, {
           params: {
-            grade: this.currentCategory
+            grade: this.value
           }
-        }).then(response => {
+        }).then(gresponse => {
           this.loading = false
-          if (response.data.code === '666') {
-            Cookies.set('token', response.data.token)
-            this.courses = response.data
+          if (gresponse.data.code === '666') {
+            Cookies.set('token', gresponse.data.token)
+            this.courses = gresponse.data.data
             console.log(this.courses)
           } else {
             this.$Message.error('失败!')
@@ -191,7 +216,7 @@ export default defineComponent({
         })
           .catch(error => {
             this.loading = false
-            console.error('失败:', error)
+            console.error('123失败:', error)
           })
       }
     }
@@ -221,7 +246,7 @@ export default defineComponent({
 }
 
 .search-input {
-  margin-right: 10px; /* 调整输入框和按钮之间的间距 */
+  margin-right: 60px; /* 调整输入框和按钮之间的间距 */
 }
 .course-grid {
   display: flex;
