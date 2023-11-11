@@ -41,6 +41,7 @@
         <p class="course-description">{{ course.content }}</p>
         <div class="completed-count">
           <i class="fas fa-user" style="color: lightgray;"></i> 已完成人数为：{{course.completedNum}}
+          <i class="fas fa-user" style="color: lightgray;"></i> 最高分数为：{{course.maxScore}}
         </div>
       </div>
     </div>
