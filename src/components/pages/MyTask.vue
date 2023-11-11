@@ -20,6 +20,7 @@
         <div class="img-container">
           <!-- 提交图片 -->
           <img :src="task.homeworkPhoto" alt="Image" class="image">
+          <i class="el-icon-download icon" @click="downloadImage"></i>
         </div>
       </div>
       <div class="requirements" v-if='task.isCorrected === 2 ||task.isCorrected === 1'>
@@ -54,9 +55,35 @@ export default defineComponent({
     }
   },
   methods: {
+    downloadImage () {
+      const childId = getUser().id
+      const taskId = this.$route.query.tasksId
+      // axios.get(`http://localhost:8080/children/file/downloadTaskChildPhoto/${childId}/${taskId}`)
+      //   .then(response => {
+      //     if (response.data.success) {
+      //       this.$Message.success('成功!')
+      //       console.log('成功')
+      //     } else {
+      //       this.$Message.error('啊啊啊啊')
+      //     }
+      //   })
+      //   .catch(error => {
+      //     this.loading = false
+      //     console.error('失败:', error)
+      //   })
+      this.$alert(`http://localhost:8080/children/file/downloadTaskChildPhoto/${childId}/${taskId}`, '下载链接', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: ${action}`
+          })
+        }
+      })
+    },
     toFilter () {
       const courseId = this.$route.query.tasksId
-      this.$router.push({name: 'filter', query: {courseId}})
+      this.$router.push({name: 'filter', query: {courseId, isToo: 'yes'}})
     },
     toMyTask () {
       this.$router.push('/Tasks')
@@ -130,6 +157,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  position: relative;
 }
 
 .requirements {
@@ -137,9 +165,11 @@ export default defineComponent({
 }
 
 .image {
-  width:500px;
+  width: 500px;
   height: 320px;
-  style:"float: left;margin-left: -376px";
+  position: relative;
+  float: left;
+  margin-left: -376px;
 }
 .submission-container {
   margin-top: 20px;
@@ -149,13 +179,13 @@ export default defineComponent({
   margin-top: 20px;
   justify-content: flex-start;
 }
-.submission {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
 
+.icon {
+  position: absolute;
+  font-size: 24px;
+  bottom: 0;
+  right: 330px;
+}
 .file-input-container {
   display: flex;
   align-items: center;
