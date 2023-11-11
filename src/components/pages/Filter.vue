@@ -101,18 +101,32 @@ export default defineComponent({
       formData.append('childId', childId)
       formData.append('taskId', taskId)
       formData.append('file', this.file)
+      const isToo = this.$route.query.isToo
       // 发送FormData到后端
       // 使用axios或其他HTTP库发送POST请求
-      axios.post(`http://localhost:8080/children/file/uploadTaskChildPhoto`, formData)
-        .then((response) => {
-          // 请求成功处理逻辑
-          console.log(response.data)
-          this.$router.push('/Course')
-        })
-        .catch((error) => {
-          // 请求失败处理逻辑
-          console.error(error)
-        })
+      if (isToo === 'yes') {
+        axios.post(`http://localhost:8080/children/file/uploadTaskChildPhotoAgain`, formData)
+          .then((response) => {
+            // 请求成功处理逻辑
+            console.log(response.data)
+            this.$router.push('/Course')
+          })
+          .catch((error) => {
+            // 请求失败处理逻辑
+            console.error(error)
+          })
+      } else {
+        axios.post(`http://localhost:8080/children/file/uploadTaskChildPhoto`, formData)
+          .then((response) => {
+            // 请求成功处理逻辑
+            console.log(response.data)
+            this.$router.push('/Course')
+          })
+          .catch((error) => {
+            // 请求失败处理逻辑
+            console.error(error)
+          })
+      }
     },
     formatFileSize (size) {
       // 格式化文件大小
