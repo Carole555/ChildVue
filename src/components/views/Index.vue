@@ -183,7 +183,7 @@
               this.notPassedTasks = newresponse.data.data.notPassedTasks
               this.passedTasks = newresponse.data.data.passedTasks
               this.pendingTasks = newresponse.data.data.pendingTasks
-              console.log(this.num)
+              console.log('num', this.num)
             } else {
               this.$Message.error('失败!')
             }
@@ -214,7 +214,7 @@
             this.loading = false
             if (nresponse.data.success) {
               Cookies.set('token', nresponse.data.data)
-              this.tasknum = nresponse.data.data
+              this.tasknum = nresponse.data.num
               console.log(this.tasknum)
               console.log('查询成功')
               this.cardMessage[3].count = this.tasknum
